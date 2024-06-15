@@ -22,13 +22,13 @@ export const setStorage = () => {
       currentCharacter: 0,
       currentRod: 1,
       catches: [],
-      //completedAreas: [],
-      completedAreas: [
+      completedAreas: [],
+      /* completedAreas: [
         '01-01', '01-02', '01-03', '01-04',
         '02-01', '02-02', '02-03', '02-04',
         '03-01', '03-02', '03-03', '03-04',
         '04-01', '04-02', '04-03',
-      ],
+      ], */
       settings: DEFAULT_SETTINGS,
     };
     STORAGE.setItem(`${appShortName}User`, JSON.stringify(userTMP));

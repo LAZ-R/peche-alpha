@@ -19,6 +19,7 @@ let cells = [
 
 export const AREAS = [
   // DÉBUTANT =====================================================================================
+  
   { // EUROPE
     id: '01-01',
     img: '01-01',
@@ -81,7 +82,7 @@ export const AREAS = [
         minMass: 1,
         maxMass: 7,
       },
-      /* {
+      {
         id: 'salmoTrutta',
         img: 'salmoTrutta',
         commonName: 'truite commune',
@@ -130,7 +131,7 @@ export const AREAS = [
         maxLength: 45,
         minMass: 350,
         maxMass: 600,
-      }, */
+      },
     ],
   },
   { // AMÉRIQUE DU NORD
