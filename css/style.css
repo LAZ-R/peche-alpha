@@ -558,7 +558,7 @@ main {
 
           &:disabled {
             opacity: .5;
-            border: 2px solid var(--grey-40);
+            border: 2px solid var(--grey-40) !important;
           }
 
           &.deb { border-color: hsl(120, 12%, 48%); }

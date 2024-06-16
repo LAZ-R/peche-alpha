@@ -114,6 +114,13 @@ const fromMapToHome = (map) => {
   document.getElementById('main').style.opacity = 0;
   setTimeout(() => {
     openAppCinematic();
+    if (map == 'cabin') {
+      //
+    } else {
+      mapMusic.pause();
+      mapBackgroundSound.pause();
+      menuMusic.currentTime = 0;
+    }
   }, 500);
 }
 
@@ -156,6 +163,22 @@ const defineCabin = () => {
 }
 
 const defineMap = (map) => {
+  //menuMusic.currentTime = 0;
+  menuMusic.pause();
+  if (getUserSetting('mapsMusic').isActive) {
+    mapMusic = new Audio(`./medias/music/${currentMap.id}.mp3`);
+  }
+  mapMusic.loop = true;
+  mapMusic.addEventListener("canplaythrough", (event) => {
+    if (getUserSetting('mapsMusic').isActive) {
+      mapMusic.play();
+      mapMusic.volume = .25;
+    }
+  });
+  if (getUserSetting('soundEffects').isActive) {
+    mapBackgroundSound = new Audio(`./medias/sounds/calm-water.mp3`);
+    mapBackgroundSound.play();
+  }
   renderBlankTemplate();
   currentMap = map;
   currentPlayerLineLetterIndex = currentMap.spawnLine - 1;
@@ -686,6 +709,7 @@ const moveFish = (fish, direction) => {
   const checkSelected = (nextCell, FISH) => {
     if (document.getElementById(nextCell).classList.contains('selected')) {
       document.getElementById(nextCell).classList.replace('selected', 'touched');
+      new Audio('./medias/sounds/splash-loud.mp3').play();
       clearInterval(fish.intervalId);
       FISH.style.opacity = 1;
       document.getElementById('buttonsArea').innerHTML = ``;
@@ -892,6 +916,33 @@ const getBestCaughtFishInfos = (fishId) => {
   }
 }
 
+const getFormattedLength = (rawLength) => {
+  let unit = 'cm';
+  let length = 0;
+  if (rawLength >= 100) {
+    unit = 'm';
+    length = rawLength / 100;
+  } else {
+    length = rawLength;
+  }
+  return `${length} ${unit}`;
+}
+
+const getFormattedMass = (rawMass) => {
+  let unit = 'g';
+  let mass = 0;
+  if (rawMass >= 1000000) {
+    unit = 't';
+    mass = (rawMass / 1000000).toFixed(1);
+  } else if (rawMass >= 1000) {
+    unit = 'kg';
+    mass = (rawMass / 1000).toFixed(2);
+  } else {
+    mass = rawMass;
+  }
+  return `${mass} ${unit}`;
+}
+
 const getIndividualFishCard = (individualFish, isBestLength, isBestMass, hasAlreadyBeenCaught) => {
   const baseFish = getFishById(individualFish.id);
   const imgSrc = baseFish.img == '' ? `./medias/images/no-picture.png` : `./medias/images/maps/${baseFish.img}.png`;
@@ -905,8 +956,8 @@ const getIndividualFishCard = (individualFish, isBestLength, isBestMass, hasAlre
       </div>
       <img class="fish-card-img" style="" src="${imgSrc}" />
       <div class="fish-card-bloc">
-        <span><span>Taille : ${individualFish.length}cm</span>${isBestLength && hasAlreadyBeenCaught ? `<span class="blinking-text">record</span>` : ''}</span>
-        <span><span>Poids : ${individualFish.mass}g</span>${isBestMass && hasAlreadyBeenCaught ? `<span class="blinking-text">record</span>` : ''}</span>
+        <span><span>Taille : ${getFormattedLength(individualFish.length)}</span>${isBestLength && hasAlreadyBeenCaught ? `<span class="blinking-text">record</span>` : ''}</span>
+        <span><span>Poids : ${getFormattedMass(individualFish.mass)}</span>${isBestMass && hasAlreadyBeenCaught ? `<span class="blinking-text">record</span>` : ''}</span>
         <div class="notation-area">${getNotationImages(individualFish.notation)}</div>
       </div>
     </div>
@@ -924,8 +975,11 @@ const getNotationImages = (notation) => {
 // Battle -------------------------
 
 const launchBattle = (domFish) => {
+  let rodSound = new Audio('./medias/sounds/remontee.mp3');
   document.getElementById('vivierButton').setAttribute('disabled', true);
-
+  if (getUserSetting('soundEffects').isActive) {
+    rodSound.play();
+  }
   isSelected = false;
   clearPlayerAvailableCells();
   domFish.remove();
@@ -958,10 +1012,14 @@ const launchBattle = (domFish) => {
   `;
 
   setTimeout(() => {
+    rodSound.pause();
     let rnd = Math.random();
     let justCompletedTheMap = false;
     
     if (rnd > 0.75) { // Bataille foirée
+      if (getUserSetting('soundEffects').isActive) {
+        new Audio('./medias/sounds/fail2.mp3').play();
+      }
       // récupération message aléatoire
       const failMessages = [
         `zut !<br>le poisson s'est enfui...`,
@@ -981,6 +1039,7 @@ const launchBattle = (domFish) => {
       `;
     } else { // Bataille gagnée
       // récupération message aléatoire
+      
       const INDIVIDUAL = getRandomIndividual(getRandomMapFishType());
 
       const previousBest = getBestCaughtFishInfos(INDIVIDUAL.id);
@@ -988,6 +1047,16 @@ const launchBattle = (domFish) => {
       const isBestMass = INDIVIDUAL.mass > previousBest.bestMass;
 
       const hasAlreadyBeenCaught = hasFishAlreadyBeenCaught(INDIVIDUAL.id);
+
+      const hasRecord = !hasAlreadyBeenCaught || isBestLength || isBestMass;
+
+      if (getUserSetting('soundEffects').isActive) {
+        if (hasRecord) {
+          new Audio('./medias/sounds/success2.mp3').play();
+        } else {
+          new Audio('./medias/sounds/success1.mp3').play();
+        }
+      }
 
       const winMessages = [
         `félicitations !`,
@@ -998,7 +1067,6 @@ const launchBattle = (domFish) => {
         `chapeau !`,
         `magnifique !`,
         `génial !`,
-        `parfait !`,
         `impressionnant !`,
         `splendide !`,
         `fantastique !`,
@@ -1011,7 +1079,7 @@ const launchBattle = (domFish) => {
       document.getElementById('popup').innerHTML = ``;
       document.getElementById('popup').innerHTML = `
         <span>
-          ${hasAlreadyBeenCaught ? '' : `${winMessages[randomIntFromInterval(0, winMessages.length - 1)]}<br>`}
+          ${hasRecord ? `${winMessages[randomIntFromInterval(0, winMessages.length - 1)]}<br>` : ''}
           vous avez attrapé :
         </span>
         ${getIndividualFishCard(INDIVIDUAL, isBestLength, isBestMass, hasAlreadyBeenCaught)}
@@ -1060,6 +1128,9 @@ const launchBattle = (domFish) => {
 /* =============================== Home page =============================== */
 
 const onPlayClick = () => {
+  if (getUserSetting('soundEffects').isActive) {
+    buttonClickSound.play();
+  }
   document.getElementById('main').innerHTML += `
     <div id="popup" class="popup home-screen">
       <div class="popup-top">
@@ -1135,6 +1206,9 @@ const onPlayClick = () => {
 window.onPlayClick = onPlayClick;
 
 const onMapGroupCloseClick = () => {
+  if (getUserSetting('soundEffects').isActive) {
+    buttonClickSound.play();
+  }
   onClosePopupClick();
   onPlayClick();
 }
@@ -1357,6 +1431,9 @@ const getMapGroupMapSelector = (groupName) => {
 }
 
 const onMapGroupClick = (groupName) => {
+  if (getUserSetting('soundEffects').isActive) {
+    buttonClickSound.play();
+  }
   onClosePopupClick();
   document.getElementById('main').innerHTML += `
     <div id="popup" class="popup home-screen">
@@ -1373,6 +1450,9 @@ const onMapGroupClick = (groupName) => {
 window.onMapGroupClick = onMapGroupClick;
 
 const onSettingsClick = () => {
+  if (getUserSetting('soundEffects').isActive) {
+    buttonClickSound.play();
+  }
   document.getElementById('main').innerHTML += `
     <div id="popup" class="popup home-screen">
       <div class="popup-top">
@@ -1388,6 +1468,9 @@ const onSettingsClick = () => {
 window.onSettingsClick = onSettingsClick;
 
 const onCharacterClick = (characterIndex) => {
+  if (getUserSetting('soundEffects').isActive) {
+    buttonClickSound.play();
+  }
   let user = getUser();
   
   document.getElementById(`char${user.currentCharacter}`).classList.remove('selected');
@@ -1402,12 +1485,18 @@ const onCharacterClick = (characterIndex) => {
 window.onCharacterClick = onCharacterClick;
 
 const onMapButtonClick = (mapIndex) => {
+  if (getUserSetting('soundEffects').isActive) {
+    buttonClickSound.play();
+  }
   currentMap = MAPS[mapIndex];
   fromHomeToMap(MAPS[mapIndex]);
 }
 window.onMapButtonClick = onMapButtonClick;
 
 const onRecordsClick = () => {
+  if (getUserSetting('soundEffects').isActive) {
+    buttonClickSound.play();
+  }
   let user = getUser();
   document.getElementById('main').innerHTML += `
     <div id="popup" class="popup home-screen">
@@ -1432,12 +1521,15 @@ const onRecordsClick = () => {
 window.onRecordsClick = onRecordsClick;
 
 const onCabinClick = () => {
-  console.log('click cabin');
+  //console.log('click cabin');
   fromHomeToMap();
 }
 window.onCabinClick = onCabinClick;
 
 const onClosePopupClick = (popupName) => {
+  if (getUserSetting('soundEffects').isActive) {
+    buttonClickSound.play();
+  }
   document.getElementById('popup').remove();
 
   if (popupName == 'home' || popupName == 'vivier') {
@@ -1451,9 +1543,12 @@ window.onClosePopupClick = onClosePopupClick;
 
 // Top part -----------------------------------------
 const onHomeClick = (isFromCabin) => {
+  if (getUserSetting('soundEffects').isActive) {
+    buttonClickSound.play();
+  }
 
   if (isFromCabin == true) {
-    leaveMap();
+    leaveMap('cabin');
   } else {
     let previousPopup = document.getElementById('popup');
     if (previousPopup != null) {
@@ -1483,7 +1578,7 @@ const onHomeClick = (isFromCabin) => {
 }
 window.onHomeClick = onHomeClick;
 
-const leaveMap = () => {
+const leaveMap = (map) => {
   isSelected = false;
   MAP_FISHES.forEach(fish => {
     clearInterval(fish.intervalId);
@@ -1491,11 +1586,14 @@ const leaveMap = () => {
   clearInterval(fishGeneration);
   MAP_FISHES = [];
   currentMapCatches = [];
-  fromMapToHome();
+  fromMapToHome(map);
 }
 window.leaveMap = leaveMap;
 
 const onVivierClick = () => {
+  if (getUserSetting('soundEffects').isActive) {
+    buttonClickSound.play();
+  }
   //console.table(currentMap.fishes);
   document.getElementById('vivierButton').setAttribute('disabled', true);
   document.getElementById('main').innerHTML += `
@@ -1597,6 +1695,9 @@ const onCellClick = (cellId) => {
   if (!isSelected) {
     if (CELL.classList.contains('selectable')) {
       CELL.classList.replace('selectable', 'selected');
+      if (getUserSetting('soundEffects').isActive) {
+        new Audio('./medias/sounds/splash3.mp3').play();
+      }
       isSelected = true;
 
       applyCharacterImgFromSelectedCell(cellId);
@@ -1615,6 +1716,9 @@ window.onCellClick = onCellClick;
 const abortFishing = (cellId) => {
   //console.log(cellId);
   if (isSelected) {
+    if (getUserSetting('soundEffects').isActive) {
+      new Audio('./medias/sounds/cancel.mp3').play();
+    }
     const CELL = document.getElementById(cellId);
     if (CELL.classList.contains('selected')) {
       CELL.classList.replace('selected', 'selectable');
@@ -1630,6 +1734,9 @@ const abortFishing = (cellId) => {
 window.abortFishing = abortFishing;
 
 const continueFishing = (completedMapId) => {
+  if (getUserSetting('soundEffects').isActive) {
+    buttonClickSound.play();
+  }
   if (completedMapId != null) {
     console.log(completedMapId);
     let previousPopup = document.getElementById('popup');
@@ -1746,19 +1853,32 @@ const handleCheck = (id) => {
                   window.location = window.location;
                 }, 300); 
               }
-              /* if (setting.id == 'music') {
+              if (setting.id == 'menuMusic') {
                   if (setting.isActive) {
-                      if (music.duration > 0 && !music.paused) {
+                      if (menuMusic.duration > 0 && !menuMusic.paused) {
                           console.log('Music is aldrady playing');
                       } else {
-                          music.play();
+                          menuMusic.play();
                       }
                   } else {
-                      if (music.duration > 0 && !music.paused) {
-                          music.pause();
+                      if (menuMusic.duration > 0 && !menuMusic.paused) {
+                          menuMusic.pause();
                       }
                   }
-              } */
+              }
+              if (setting.id == 'mapsMusic') {
+                /* if (setting.isActive) {
+                    if (mapMusic.duration > 0 && !mapMusic.paused) {
+                        console.log('Music is aldrady playing');
+                    } else {
+                        mapMusic.play();
+                    }
+                } else {
+                    if (mapMusic.duration > 0 && !mapMusic.paused) {
+                        mapMusic.pause();
+                    }
+                } */
+            }
           }
       });
   });
@@ -1827,6 +1947,20 @@ const fishImages = {
 };
 
 openAppCinematic(true);
+const buttonClickSound = new Audio('./medias/sounds/click.mp3');
+buttonClickSound.volume = .25;
+const menuMusic = new Audio('./medias/music/home2.mp3');
+menuMusic.loop = true;
+menuMusic.volume = .25;
+menuMusic.addEventListener("canplaythrough", (event) => {
+  if (getUserSetting('menuMusic').isActive) {
+    menuMusic.play();
+  }
+});
+let mapMusic = new Audio('./medias/music/home1.mp3');
+mapMusic.loop = true;
+let mapBackgroundSound = new Audio('./medias/music/home1.mp3');
+mapBackgroundSound.loop = true;
 
 // ------------------------------------------------------------------------------------
 

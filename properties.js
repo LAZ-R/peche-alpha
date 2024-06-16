@@ -1,20 +1,14 @@
 export const APP_NAME = 'la Grand\' Pêche (alpha)';
-export const APP_VERSION = '0.1.01'; // v 0.1.01 - badge map finie + renommage en maps + gestion pool map cabane + tri par nom scientifique
-export const APP_SHORT_NAME = `pechealpha0101`;
+export const APP_VERSION = '0.1.02'; // v 0.1.02 - ajout audio + finalisation poissons 01-01
+export const APP_SHORT_NAME = `pechealpha0102`;
 
 /*
   RAF ----------------------------------------------------------
-  
-  - Map france - ajouter :
-    Sandre
-    Carpe
-    Brochet
+
+  - completer musique
+  - completer sons
 
   - Ajout personalisation ?
-
-  - completer parametres
-  - Ajout musique
-  - Ajout sons
 
   - passer toutes les images
     png en webp

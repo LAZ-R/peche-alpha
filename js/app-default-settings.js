@@ -10,15 +10,25 @@ export const DEFAULT_SETTINGS = [
             }
         ]
     },
-    /* {
+    {
         id: 'audio',
-        name: 'Audio',
+        name: 'audio',
         settings: [
             {
-                id: 'music',
-                name: 'Musique',
+                id: 'menuMusic',
+                name: 'musique (menu)',
+                isActive: true
+            },
+            {
+                id: 'mapsMusic',
+                name: 'musique (cartes)',
+                isActive: true
+            },
+            {
+                id: 'soundEffects',
+                name: 'effets sonores',
                 isActive: true
             }
         ]
-    }, */
+    },
 ]
