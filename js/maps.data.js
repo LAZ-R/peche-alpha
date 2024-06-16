@@ -17,7 +17,7 @@ let cells = [
   'P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'P7', 'P8', 'P9', 'P10', 'P11', 'P12', 'P13', 'P14', 'P15', 'P16',
 ];
 
-export const AREAS = [
+export const MAPS = [
   // DÉBUTANT =====================================================================================
   
   { // EUROPE
@@ -64,7 +64,7 @@ export const AREAS = [
     fishes: [
       {
         id: 'rutilusRutilus',
-        img: 'rutilusRutilus',
+        img: '/01-01/fishes/rutilusRutilus',
         commonName: 'gardon',
         scientificName: 'rutilus rutilus',
         minLength: 22,
@@ -74,7 +74,7 @@ export const AREAS = [
       },
       {
         id: 'gasterosteusAculeatus',
-        img: 'gasterosteusAculeatus',
+        img: '/01-01/fishes/gasterosteusAculeatus',
         commonName: 'épinoche',
         scientificName: 'gasterosteus aculeatus',
         minLength: 4,
@@ -84,7 +84,7 @@ export const AREAS = [
       },
       {
         id: 'salmoTrutta',
-        img: 'salmoTrutta',
+        img: '/01-01/fishes/salmoTrutta',
         commonName: 'truite commune',
         scientificName: 'salmo trutta',
         minLength: 18,
@@ -94,7 +94,7 @@ export const AREAS = [
       },
       {
         id: 'tincaTinca',
-        img: 'tincaTinca',
+        img: '/01-01/fishes/tincaTinca',
         commonName: 'tanche',
         scientificName: 'tinca tinca',
         minLength: 27,
@@ -104,7 +104,7 @@ export const AREAS = [
       },
       {
         id: 'percaFluviatilis',
-        img: 'percaFluviatilis',
+        img: '/01-01/fishes/percaFluviatilis',
         commonName: 'perche',
         scientificName: 'perca fluviatilis',
         minLength: 15,
@@ -114,7 +114,7 @@ export const AREAS = [
       },
       {
         id: 'gobioGobio',
-        img: 'gobioGobio',
+        img: '/01-01/fishes/gobioGobio',
         commonName: 'goujon',
         scientificName: 'gobio gobio',
         minLength: 8,
@@ -124,8 +124,8 @@ export const AREAS = [
       },
       {
         id: 'lotaLota',
-        img: 'lotaLota',
-        commonName: 'lote',
+        img: '/01-01/fishes/lotaLota',
+        commonName: 'lotte',
         scientificName: 'lota lota',
         minLength: 35,
         maxLength: 45,
@@ -402,7 +402,7 @@ export const AREAS = [
       'B2', 'B4',
       'C2', 'C3', 'C4'
     ],
-    fishes: [
+    /* fishes: [
       {
         id: '03-04',
         img: '',
@@ -413,13 +413,13 @@ export const AREAS = [
         minMass: 250,
         maxMass: 600,
       },
-    ],
-    /* fishes: [
+    ], */
+    fishes: [
       {
         id: 'arapaimaGigas',
         img: '', // à faire ------------
-        commonName: 'Arapaïma',
-        scientificName: 'Arapaima gigas',
+        commonName: 'arapaïma',
+        scientificName: 'arapaima gigas',
         minLength: 147,
         maxLength: 451,
         minMass: 78569,
@@ -430,8 +430,8 @@ export const AREAS = [
       {
         id: 'piaractusBrachypomus',
         img: '', // à faire ------------
-        commonName: 'Pacu',
-        scientificName: 'Piaractus brachypomus',
+        commonName: 'pacu',
+        scientificName: 'piaractus brachypomus',
         minLength: 54,
         maxLength: 89,
         minMass: 11000,
@@ -440,8 +440,8 @@ export const AREAS = [
       {
         id: 'colossomaMacropomum',
         img: '', // à faire ------------
-        commonName: 'Tambaqui',
-        scientificName: 'Colossoma macropomum',
+        commonName: 'tambaqui',
+        scientificName: 'colossoma macropomum',
         minLength: 63,
         maxLength: 109,
         minMass: 19142,
@@ -452,8 +452,8 @@ export const AREAS = [
       {
         id: 'pygocentrusNattereri',
         img: '', // à faire ------------
-        commonName: 'Piranha à ventre rouge',
-        scientificName: 'Pygocentrus nattereri',
+        commonName: 'piranha à ventre rouge',
+        scientificName: 'pygocentrus nattereri',
         minLength: 21,
         maxLength: 46,
         minMass: 1873,
@@ -462,14 +462,14 @@ export const AREAS = [
       {
         id: 'pygocentrusPiraya',
         img: '', // à faire ------------
-        commonName: 'Piranha à queue noire',
-        scientificName: 'Pygocentrus piraya',
+        commonName: 'piranha à queue noire',
+        scientificName: 'pygocentrus piraya',
         minLength: 24,
         maxLength: 52,
         minMass: 2154,
         maxMass: 4686,
       },
-    ], */
+    ],
   },
 
   // EXPERT =======================================================================================
@@ -581,13 +581,34 @@ export const AREAS = [
     id: '05-01',
     img: '05-01',
     name: 'la cabane de<br>M. Wade',
-    spawnLine: 2,
-    spawnColumn: 3,
-    walkableCells: ['B3'],
+    spawnLine: 3,
+    spawnColumn: 7,
+    walkableCells: [
+      'B6', 'B7', 'B8', 'B9', 'B10', 'B11',
+      'C5', 'C6', 'C7', 'C8', 'C9', 'C10', 'C11', 'C12',
+      'D3', 'D4', 'D5', 'D12', 'D13', 'D14',
+      'E1', 'E2', 'E3', 'E14', 'E15', 'E16',
+      'F1', 'F2', 'F15', 'F16',
+      'G1', 'G16',
+      'H1', 'H16',
+      'I1', 'I16',
+      'J1', 'J16',
+      'K1', 'K2', 'K15', 'K16',
+      'L1', 'L2', 'L3', 'L4', 'L13', 'L14', 'L15', 'L16',
+      'M1', 'M2', 'M3', 'M4', 'M5', 'M6', 'M7', 'M8', 'M9', 'M10', 'M11', 'M12', 'M13', 'M14', 'M15', 'M16',
+      'N1', 'N2', 'N3', 'N4', 'N5', 'N12', 'N13', 'N14', 'N15', 'N16',
+      'P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'P7', 'P8', 'P9', 'P10', 'P11', 'P12', 'P15', 'P16',
+    ],
     swimmableCells: [
-      'A2', 'A3', 'A4',
-      'B2', 'B4',
-      'C2', 'C3', 'C4'
+      'D6', 'D7', 'D8', 'D9', 'D10', 'D11', 
+      'E4', 'E5', 'E6', 'E7', 'E8', 'E9', 'E10', 'E11', 'E12', 'E13', 
+      'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12', 'F13', 'F14', 
+      'G2', 'G3', 'G4', 'G5', 'G6', 'G7', 'G8', 'G9', 'G10', 'G11', 'G12', 'G13', 'G14', 'G15', 
+      'H2', 'H3', 'H4', 'H5', 'H6', 'H7', 'H8', 'H9', 'H10', 'H11', 'H12', 'H13', 'H14', 'H15', 
+      'I2', 'I3', 'I4', 'I5', 'I6', 'I7', 'I8', 'I9', 'I10', 'I11', 'I12', 'I13', 'I14', 'I15', 
+      'J2', 'J3', 'J4', 'J5', 'J6', 'J7', 'J8', 'J9', 'J10', 'J11', 'J12', 'J13', 'J14', 'J15', 
+      'K3', 'K4', 'K5', 'K6', 'K7', 'K8', 'K9', 'K10', 'K11', 'K12', 'K13', 'K14', 
+      'L5', 'L6', 'L7', 'L8', 'L9', 'L10', 'L11', 'L12', 
     ],
     fishes: [
       {

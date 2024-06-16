@@ -153,7 +153,7 @@ main {
 
     &.home-screen {
       /* padding: var(--cell-size); */
-      background-image: url('../medias/images/areas/home-100.webp');
+      background-image: url('../medias/images/maps/home-100.webp');
       gap: var(--cell-size);
 
       .home-buttons-area {
@@ -533,7 +533,7 @@ main {
         }
       }
 
-      .area-selector {
+      .map-selector {
         display: flex;
         flex-direction: column;
         /* border: 1px solid red; */
@@ -542,10 +542,10 @@ main {
         overflow-y: scroll;
         gap: var(--cell-size);
 
-        .area-group-container {
+        .map-group-container {
           background-color: transparent;
           display: flex;
-          justify-content: flex-start;
+          justify-content: space-between;
           align-items: center;
           min-height: calc(var(--cell-size) * 3); height: calc(var(--cell-size) * 3); max-height: calc(var(--cell-size) * 3);
           padding: 0 var(--cell-size);
@@ -561,9 +561,14 @@ main {
             border: 2px solid var(--grey-40);
           }
 
+          &.deb { border-color: hsl(120, 12%, 48%); }
+          &.int { border-color: hsl(75, 22%, 48%);; }
+          &.ava { border-color: hsl(50, 22%, 48%);; }
+          &.exp { border-color: hsl(0, 12%, 48%);; }
+
         }
 
-        .area-group-separator {
+        .map-group-separator {
           display: flex;
           justify-content: space-between;
           align-items: center;
@@ -578,7 +583,7 @@ main {
           }
         }
 
-        .area-line {
+        .map-line {
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
@@ -586,7 +591,8 @@ main {
           height: fit-content;
           gap: var(--cell-size);
 
-          .area-button {
+          .map-button {
+            position: relative;
             aspect-ratio: 539/666;
             display: flex;
             flex-direction: column;
@@ -599,6 +605,7 @@ main {
             border: none;
             /* box-shadow: var(--box-shadow); */
             overflow: hidden;
+            color: var(--grey-80);
 
             span {
               display: flex;
@@ -616,10 +623,40 @@ main {
             }
 
             &:disabled {
-              opacity: .5;
+              opacity: .66;
+              color: black;
 
               > img {
                 filter: brightness(0);
+              }
+            }
+
+            &.completed {
+              color: var(--grey-60);
+
+              > img {
+                /* filter: brightness(0); */
+                filter: grayscale(.75) brightness(.75) /* sepia(.2) */;
+              }
+              
+
+              &::after {
+                --size: calc(var(--cell-size) * 1.5);
+                --gap: calc(var(--cell-size) / 5);
+
+                content: "";
+                position: absolute;
+                top: var(--gap);
+                right: var(--gap);
+                display: flex;
+                min-width: var(--size);
+                min-height: var(--size);
+                background-image: url('../medias/images/completed.png');
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: contain;
+                /* box-shadow: var(--box-shadow); */
+                /* border-radius: 500px; */
               }
             }
           }
@@ -757,7 +794,7 @@ main {
         }
       }
 
-      .area-vivier {
+      .map-vivier {
         display: flex;
         flex-direction: column;
         width: 100%;
@@ -770,7 +807,7 @@ main {
           align-items: center;
           gap: var(--cell-size);
 
-          &.uncatched {
+          &.uncaught {
             opacity: .5;
             filter: grayscale(1);
           }
@@ -894,6 +931,12 @@ main {
           justify-content: center;
           align-items: center;
           gap: 8px;
+        }
+
+        &.fish-name {
+          & span:last-child {
+            font-size: 14px;
+          }
         }
       }
 
@@ -1051,4 +1094,19 @@ main {
 
 .blinking-text {
   animation: blink .5s infinite;
+}
+
+.badge {
+  --size: calc(var(--cell-size) * 1);
+
+  display: flex;
+  min-width: var(--size);
+  min-height: var(--size);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+
+  &.check {
+    background-image: url('../medias/images/completed.png');
+  }
 }

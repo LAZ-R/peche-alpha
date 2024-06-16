@@ -1,5 +1,5 @@
 import { APP_VERSION } from "../properties.js";
-import { AREAS } from "./areas.data.js";
+import { MAPS } from "./maps.data.js";
 import { CHARACTERS } from "./characters.data.js";
 import { getUser, getUserSetting, setStorage, setUser } from "./storage.js";
 import { requestWakeLock } from "./wakelock.js";
@@ -96,11 +96,11 @@ const openAppCinematic = (isHome) => {
   
 }
 
-const fromHomeToArea = (area) => {
+const fromHomeToMap = (map) => {
   document.getElementById('main').style.opacity = 0;
   setTimeout(() => {
-    if (area != undefined) {
-      defineArea(area);
+    if (map != undefined) {
+      defineMap(map);
     } else {
       defineCabin();
     }
@@ -110,7 +110,7 @@ const fromHomeToArea = (area) => {
   }, 500);
 }
 
-const fromAreaToHome = (area) => {
+const fromMapToHome = (map) => {
   document.getElementById('main').style.opacity = 0;
   setTimeout(() => {
     openAppCinematic();
@@ -122,7 +122,7 @@ const defineCabin = () => {
 
   document.getElementById('screenArea').innerHTML = '';
   document.getElementById('screenArea').classList.remove('home-screen');
-  document.getElementById('screenArea').style.backgroundImage = `url('./medias/images/areas/cabin/cabin-100.gif')`;
+  document.getElementById('screenArea').style.backgroundImage = `url('./medias/images/maps/cabin/cabin-100.gif')`;
 
   document.getElementById('topArea').innerHTML = `
     <button id="homeButton" onclick="onHomeClick(true)">accueil</button>
@@ -155,60 +155,60 @@ const defineCabin = () => {
   }, 1000);
 }
 
-const defineArea = (area) => {
+const defineMap = (map) => {
   renderBlankTemplate();
-  currentArea = area;
-  currentPlayerLineLetterIndex = currentArea.spawnLine - 1;
-  currentPlayerColumn = currentArea.spawnColumn;
-  renderCurrentArea();
+  currentMap = map;
+  currentPlayerLineLetterIndex = currentMap.spawnLine - 1;
+  currentPlayerColumn = currentMap.spawnColumn;
+  renderCurrentMap();
   setPlayerSpawn();
-  AREA_FISHES = [];
+  MAP_FISHES = [];
   let rndCell = getRandomSwimmableCellCoordinates();
   generateFish(rndCell.letterIndex, rndCell.column);
   generateFishRandomlyXTimes();
 }
 
-/* ############################### Area page ############################### */
+/* ############################### Map page ############################### */
 
 /* ================================ Top part ================================ */
 const renderVivierFishCard = (fish) => {
   let user = getUser();
-  let hasBeenCatch = false;
+  let hasBeenCaught = false;
   let bestNotation = 0;
 
-  user.catches.forEach(catchedFish => {
-    //console.log(catchedFish.fishId);
-    if (fish.id == catchedFish.fishId) {
-      //console.log('has been catched');
-      hasBeenCatch = true;
-      if (catchedFish.notation > bestNotation) {
-        bestNotation = catchedFish.notation;
+  user.catches.forEach(caughtFish => {
+    //console.log(caughtFish.fishId);
+    if (fish.id == caughtFish.fishId && caughtFish.mapId == currentMap.id) {
+      //console.log('has been caught');
+      hasBeenCaught = true;
+      if (caughtFish.notation > bestNotation) {
+        bestNotation = caughtFish.notation;
       }
     }
   });
 
-  const imgSrc = fish.img == '' ? `./medias/images/no-picture.png` : `./medias/images/areas/${currentArea.id}/fishes/${fish.img}.png`;
+  const imgSrc = fish.img == '' ? `./medias/images/no-picture.png` : `./medias/images/maps/${fish.img}.png`;
   return `
-    <div class="vivier-fish-card ${hasBeenCatch ? '' : 'uncatched'}">
+    <div class="vivier-fish-card ${hasBeenCaught ? '' : 'uncaught'}">
       <img src="${imgSrc}" />
       <div>
         <span>${fish.commonName}</span>
-        <span>${fish.scientificName}</span>
+        <span><i>${fish.scientificName}</i></span>
         </div>
-        ${hasBeenCatch ?  `<div class="notation-area small">${getNotationImages(bestNotation)}</div>` : ''}
+        ${hasBeenCaught ?  `<div class="notation-area small">${getNotationImages(bestNotation)}</div>` : ''}
     </div>
   `;
 }
 /* <span>de ${fish.minLength}cm à ${fish.maxLength}cm</span>
         <span>de ${fish.minMass}g à ${fish.maxMass}g</span> */
 
-const renderAreaVivier = () => {
+const renderMapVivier = () => {
   let txt = '';
-  currentArea.fishes.forEach(fish => {
+  currentMap.fishes.forEach(fish => {
     txt += renderVivierFishCard(fish);
   });
   return `
-    <div class="area-vivier">
+    <div class="map-vivier">
       ${txt}
     </div>
   `;
@@ -390,7 +390,7 @@ const getCrossContainer = () => {
 const getHistoryContainer = () => {
   return `
     <div class="history-container">
-      <span class="title"><span>session</span><span>${currentAreaCatches.length}</span></span>
+      <span class="title"><span>session</span><span>${currentMapCatches.length}</span></span>
       <div class="history-data">
         ${getHistoryFishCards()}
       </div>
@@ -399,7 +399,7 @@ const getHistoryContainer = () => {
 
 const getHistoryFishCard = (fish) => {
   const completeFish = getFishById(fish.id);
-  const imgSrc = completeFish.img == '' ? `./medias/images/no-picture.png` : `./medias/images/areas/${currentArea.id}/fishes/${completeFish.img}.png`;
+  const imgSrc = completeFish.img == '' ? `./medias/images/no-picture.png` : `./medias/images/maps/${completeFish.img}.png`;
   return `
     <div class="history-fish-card">
       <img src="${imgSrc}" />
@@ -411,28 +411,28 @@ const getHistoryFishCard = (fish) => {
 
 const getHistoryFishCards = () => {
   let str = '';
-  currentAreaCatches.toReversed().forEach(fish => {
+  currentMapCatches.toReversed().forEach(fish => {
     str += getHistoryFishCard(fish);
   });
   return str
 }
 
-/* =============================== Area =============================== */
+/* =============================== Map =============================== */
 
-const renderCurrentArea = () => {
+const renderCurrentMap = () => {
   document.getElementById('topArea').innerHTML = `
     <button id="homeButton" onclick="onHomeClick()">accueil</button>
-    <span>${currentArea.name}</span>
+    <span>${currentMap.name}</span>
     <button id="vivierButton" class="vivier-button" onclick="onVivierClick()">vivier</button>`;
 
-  document.getElementById('screenArea').style.backgroundImage = `url('./medias/images/areas/${currentArea.id}/${currentArea.img}.webp')`;
-  if (currentArea.imgOver != undefined) {
-    document.getElementById('over').style.backgroundImage = `url('./medias/images/areas/${currentArea.id}/${currentArea.imgOver}.webp')`;
+  document.getElementById('screenArea').style.backgroundImage = `url('./medias/images/maps/${currentMap.id}/${currentMap.img}.webp')`;
+  if (currentMap.imgOver != undefined) {
+    document.getElementById('over').style.backgroundImage = `url('./medias/images/maps/${currentMap.id}/${currentMap.imgOver}.webp')`;
   }
-  currentArea.walkableCells.forEach(cell => {
+  currentMap.walkableCells.forEach(cell => {
     document.getElementById(cell).classList.add('walkable');
   });
-  currentArea.swimmableCells.forEach(cell => {
+  currentMap.swimmableCells.forEach(cell => {
     document.getElementById(cell).classList.add('swimmable');
   });
 }
@@ -674,7 +674,7 @@ const applyCharacterImgFromSelectedCell = (cellId) => {
 /* =============================== Fish =============================== */
 
 const getRandomSwimmableCellCoordinates = () => {
-  let rndCell = currentArea.swimmableCells[randomIntFromInterval(0, currentArea.swimmableCells.length - 1)];
+  let rndCell = currentMap.swimmableCells[randomIntFromInterval(0, currentMap.swimmableCells.length - 1)];
   const letter = rndCell.charAt(0);
   let column = rndCell.substring(1);
   let letterIndex = letters.indexOf(letter);
@@ -810,8 +810,8 @@ const generateFish = (letterIndex, column) => {
   FISH.style.top = `calc(${fish.currentLineLetterIndex} * var(--cell-size))`;
   FISH.style.left = `calc(${fish.currentColumn - 1} * var(--cell-size))`;
 
-  AREA_FISHES.push(fish);
-  moveFishRandomlyXTimes(AREA_FISHES[AREA_FISHES.length - 1], 1000, randomIntFromInterval(minFishMovement, maxFishMovement));
+  MAP_FISHES.push(fish);
+  moveFishRandomlyXTimes(MAP_FISHES[MAP_FISHES.length - 1], 1000, randomIntFromInterval(minFishMovement, maxFishMovement));
 }
 
 const generateFishRandomlyXTimes = () => {
@@ -825,8 +825,8 @@ const generateFishRandomlyXTimes = () => {
 
 // Génération de poisson aléatoire ---------------------------
 
-const getRandomAreaFishType = () => {
-  return currentArea.fishes[randomIntFromInterval(0, currentArea.fishes.length - 1)];
+const getRandomMapFishType = () => {
+  return currentMap.fishes[randomIntFromInterval(0, currentMap.fishes.length - 1)];
 };
 
 const getRandomIndividual = (fishType) => {
@@ -867,21 +867,21 @@ const getRandomIndividual = (fishType) => {
 }
 
 const getFishById = (id) => {
-  return currentArea.fishes.filter((fish) => fish.id == id)[0];
+  return currentMap.fishes.filter((fish) => fish.id == id)[0];
 }
 
-const getBestCatchedFishInfos = (fishId) => {
+const getBestCaughtFishInfos = (fishId) => {
   let bestLength = 0;
   let bestMass = 0;
   let user = getUser();
 
-  user.catches.forEach(catchedFish => {
-    if (catchedFish.fishId == fishId) {
-      if (catchedFish.fishLength > bestLength) {
-        bestLength = catchedFish.fishLength;
+  user.catches.forEach(caughtFish => {
+    if (caughtFish.fishId == fishId) {
+      if (caughtFish.fishLength > bestLength) {
+        bestLength = caughtFish.fishLength;
       }
-      if (catchedFish.fishMass > bestMass) {
-        bestMass = catchedFish.fishMass;
+      if (caughtFish.fishMass > bestMass) {
+        bestMass = caughtFish.fishMass;
       }
     }
   });
@@ -892,21 +892,21 @@ const getBestCatchedFishInfos = (fishId) => {
   }
 }
 
-const getIndividualFishCard = (individualFish, isBestLength, isBestMass, hasAlreadyBeenCatched) => {
+const getIndividualFishCard = (individualFish, isBestLength, isBestMass, hasAlreadyBeenCaught) => {
   const baseFish = getFishById(individualFish.id);
-  const imgSrc = baseFish.img == '' ? `./medias/images/no-picture.png` : `./medias/images/areas/${currentArea.id}/fishes/${baseFish.img}.png`;
+  const imgSrc = baseFish.img == '' ? `./medias/images/no-picture.png` : `./medias/images/maps/${baseFish.img}.png`;
 
   return `
     <div class="fish-card">
-      ${!hasAlreadyBeenCatched ? `<div class="blinking-text">nouveau</div>` : ''}
+      ${!hasAlreadyBeenCaught ? `<div class="blinking-text">nouveau</div>` : ''}
       <div class="fish-card-bloc fish-name">
         <span>${baseFish.commonName}</span>
-        <span>${baseFish.scientificName}</span>
+        <span><i>${baseFish.scientificName}</i></span>
       </div>
       <img class="fish-card-img" style="" src="${imgSrc}" />
       <div class="fish-card-bloc">
-        <span><span>Taille : ${individualFish.length}cm</span>${isBestLength && hasAlreadyBeenCatched ? `<span class="blinking-text">record</span>` : ''}</span>
-        <span><span>Poids : ${individualFish.mass}g</span>${isBestMass && hasAlreadyBeenCatched ? `<span class="blinking-text">record</span>` : ''}</span>
+        <span><span>Taille : ${individualFish.length}cm</span>${isBestLength && hasAlreadyBeenCaught ? `<span class="blinking-text">record</span>` : ''}</span>
+        <span><span>Poids : ${individualFish.mass}g</span>${isBestMass && hasAlreadyBeenCaught ? `<span class="blinking-text">record</span>` : ''}</span>
         <div class="notation-area">${getNotationImages(individualFish.notation)}</div>
       </div>
     </div>
@@ -959,7 +959,7 @@ const launchBattle = (domFish) => {
 
   setTimeout(() => {
     let rnd = Math.random();
-    let justCompletedTheArea = false;
+    let justCompletedTheMap = false;
     
     if (rnd > 0.75) { // Bataille foirée
       // récupération message aléatoire
@@ -981,13 +981,13 @@ const launchBattle = (domFish) => {
       `;
     } else { // Bataille gagnée
       // récupération message aléatoire
-      const INDIVIDUAL = getRandomIndividual(getRandomAreaFishType());
+      const INDIVIDUAL = getRandomIndividual(getRandomMapFishType());
 
-      const previousBest = getBestCatchedFishInfos(INDIVIDUAL.id);
+      const previousBest = getBestCaughtFishInfos(INDIVIDUAL.id);
       const isBestLength = INDIVIDUAL.length > previousBest.bestLength;
       const isBestMass = INDIVIDUAL.mass > previousBest.bestMass;
 
-      const hasAlreadyBeenCatched = hasFishAlreadyBeenCatched(INDIVIDUAL.id);
+      const hasAlreadyBeenCaught = hasFishAlreadyBeenCaught(INDIVIDUAL.id);
 
       const winMessages = [
         `félicitations !`,
@@ -1011,14 +1011,14 @@ const launchBattle = (domFish) => {
       document.getElementById('popup').innerHTML = ``;
       document.getElementById('popup').innerHTML = `
         <span>
-          ${hasAlreadyBeenCatched ? '' : `${winMessages[randomIntFromInterval(0, winMessages.length - 1)]}<br>`}
+          ${hasAlreadyBeenCaught ? '' : `${winMessages[randomIntFromInterval(0, winMessages.length - 1)]}<br>`}
           vous avez attrapé :
         </span>
-        ${getIndividualFishCard(INDIVIDUAL, isBestLength, isBestMass, hasAlreadyBeenCatched)}
+        ${getIndividualFishCard(INDIVIDUAL, isBestLength, isBestMass, hasAlreadyBeenCaught)}
       `;
 
       const STORAGE_INDIVIDUAL = {
-        areaId: currentArea.id,
+        mapId: currentMap.id,
         fishId: INDIVIDUAL.id,
         fishLength: INDIVIDUAL.length,
         fishMass: INDIVIDUAL.mass,
@@ -1029,26 +1029,26 @@ const launchBattle = (domFish) => {
       user.catches.push(STORAGE_INDIVIDUAL);
       setUser(user);
 
-      let areaCatch = {
+      let mapCatch = {
         id: INDIVIDUAL.id,
         notation: INDIVIDUAL.notation,
-        isNew: !hasAlreadyBeenCatched,
+        isNew: !hasAlreadyBeenCaught,
         isRecord: isBestLength || isBestMass
       }
-      currentAreaCatches.push(areaCatch);
-      //console.table(currentAreaCatches);
+      currentMapCatches.push(mapCatch);
+      //console.table(currentMapCatches);
 
-      if (!isAreaCompleted(currentArea.id) && haveAllAreaFishesHaveBeenCaught(currentArea.id)) {
-        console.log('Area completed !!)');
+      if (!isMapCompleted(currentMap.id) && haveAllMapFishesHaveBeenCaught(currentMap.id)) {
+        console.log('Map completed !!)');
         let user = getUser();
-        user.completedAreas.push(currentArea.id);
+        user.completedMaps.push(currentMap.id);
         setUser(user);
-        justCompletedTheArea = true;
+        justCompletedTheMap = true;
       }
 
     }
     setPlayerAvailableCells();
-    document.getElementById('buttonsArea').innerHTML = `<button class="continue-button" onclick="continueFishing(${justCompletedTheArea ? `'${currentArea.id}'` : ''})">continuer</button>`;
+    document.getElementById('buttonsArea').innerHTML = `<button class="continue-button" onclick="continueFishing(${justCompletedTheMap ? `'${currentMap.id}'` : ''})">continuer</button>`;
   }, 3500);
 }
 
@@ -1066,64 +1066,64 @@ const onPlayClick = () => {
         <span>destination</span>
         <button class="close-popup-button" onclick="onClosePopupClick()">X</button>
       </div>
-      <div class="area-selector">
+      <div class="map-selector">
 
-        <div class="area-group-separator">
+        <div class="map-group-separator">
           <div class="separator-part"></div>
           <div>campagne</div>
           <div class="separator-part"></div>
         </div>
 
-        <button class="area-group-container deb" onclick="onAreaGroupClick('débutant')">
-          <span class="title">débutant</span>
+        <button class="map-group-container deb" onclick="onMapGroupClick('débutant')">
+          <span class="title">débutant</span>${isMapCompleted('01-04') ? `<div class="badge check"></div>` : ''}
         </button>
 
-        <button class="area-group-container int" onclick="onAreaGroupClick('intermédiaire')" ${isAreaCompleted('01-04') ? '' : 'disabled'}>
-          <span class="title">intermédiaire</span>
+        <button class="map-group-container int" onclick="onMapGroupClick('intermédiaire')" ${isMapCompleted('01-04') ? '' : 'disabled'}>
+          <span class="title">intermédiaire</span>${isMapCompleted('02-04') ? `<div class="badge check"></div>` : ''}
         </button>
 
-        <button class="area-group-container con" onclick="onAreaGroupClick('avancé')" ${isAreaCompleted('02-04') ? '' : 'disabled'}>
-          <span class="title">avancé</span>
+        <button class="map-group-container ava" onclick="onMapGroupClick('avancé')" ${isMapCompleted('02-04') ? '' : 'disabled'}>
+          <span class="title">avancé</span>${isMapCompleted('03-04') ? `<div class="badge check"></div>` : ''}
         </button>
 
-        <button class="area-group-container exp" onclick="onAreaGroupClick('expert')" ${isAreaCompleted('03-04') ? '' : 'disabled'}>
-          <span class="title">expert</span>
+        <button class="map-group-container exp" onclick="onMapGroupClick('expert')" ${isMapCompleted('03-04') ? '' : 'disabled'}>
+          <span class="title">expert</span>${isMapCompleted('04-04') ? `<div class="badge check"></div>` : ''}
         </button>
 
         <!-- ------------------------------------- MAPS BONUS ------------------------------------- -->
 
-        ${isAreaCompleted('04-04') ? `
-          <div class="area-group-separator">
+        ${isMapCompleted('04-04') ? `
+          <div class="map-group-separator">
             <div class="separator-part"></div>
             <div>bonus</div>
             <div class="separator-part"></div>
           </div>
 
-          <div class="area-line">
-            <button class="area-button" onclick="onAreaButtonClick(16)">
-              <img src="./medias/images/areas/05-01/05-01-fix.webp" />
+          <div class="map-line">
+            <button class="map-button  ${isMapCompleted('05-01') ? `completed` : ''}" onclick="onMapButtonClick(16)">
+              <img src="./medias/images/maps/05-01/05-01-fix.webp" />
               <span>la cabane de<br>M. Wade</span>
             </button>
-            <button class="area-button" onclick="onAreaButtonClick(17)">
-              <img src="./medias/images/areas/05-02/05-02-fix.webp" />
+            <button class="map-button ${isMapCompleted('05-02') ? `completed` : ''}" onclick="onMapButtonClick(17)">
+              <img src="./medias/images/maps/05-02/05-02-fix.webp" />
               <span>les temps<br>anciens</span>
             </button>
           </div>` : ''}
 
         <!-- ------------------------------------- EXTENSIONS ------------------------------------- -->
-        <div class="area-group-separator">
+        <div class="map-group-separator">
           <div class="separator-part"></div>
           <div>extensions</div>
           <div class="separator-part"></div>
         </div>
 
-        <div class="area-line">
-          <button class="area-button" onclick="onAreaButtonClick(18)">
-            <img src="./medias/images/areas/ext-01/ext-01-fix.webp" />
+        <div class="map-line">
+          <button class="map-button ${isMapCompleted('ext-01') ? `completed` : ''}" onclick="onMapButtonClick(18)">
+            <img src="./medias/images/maps/ext-01/ext-01-fix.webp" />
             <span>mer rouge</span>
           </button>
-          <button class="area-button" onclick="onAreaButtonClick(19)">
-            <img src="./medias/images/areas/ext-02/ext-02-fix.webp" />
+          <button class="map-button ${isMapCompleted('ext-02') ? `completed` : ''}" onclick="onMapButtonClick(19)">
+            <img src="./medias/images/maps/ext-02/ext-02-fix.webp" />
             <span>japon</span>
           </button>
         </div>
@@ -1134,55 +1134,55 @@ const onPlayClick = () => {
 }
 window.onPlayClick = onPlayClick;
 
-const onAreaGroupCloseClick = () => {
+const onMapGroupCloseClick = () => {
   onClosePopupClick();
   onPlayClick();
 }
-window.onAreaGroupCloseClick = onAreaGroupCloseClick;
+window.onMapGroupCloseClick = onMapGroupCloseClick;
 
-const getAreaGroupAreaSelector = (groupName) => {
+const getMapGroupMapSelector = (groupName) => {
   switch (groupName) {
     case 'débutant': return `
-      <div class="area-line">
-        <button class="area-button" onclick="onAreaButtonClick(0)">
-          <img src="./medias/images/areas/01-01/01-01-fix.webp" />
+      <div class="map-line">
+        <button class="map-button ${isMapCompleted('01-01') ? `completed` : ''}" onclick="onMapButtonClick(0)">
+          <img src="./medias/images/maps/01-01/01-01-fix.webp" />
           <span>europe</span>
         </button>
-        <button class="area-button" onclick="onAreaButtonClick(1)"
-          ${isAreaCompleted('01-01')
+        <button class="map-button ${isMapCompleted('01-02') ? `completed` : ''}" onclick="onMapButtonClick(1)"
+          ${isMapCompleted('01-01')
             ? `>
-              <img src="./medias/images/areas/01-02/01-02-fix.webp" />
+              <img src="./medias/images/maps/01-02/01-02-fix.webp" />
               <span>amérique<br>du nord</span>
             ` 
             : `disabled>
-              <img src="./medias/images/areas/01-02/01-02-fix.webp" />
+              <img src="./medias/images/maps/01-02/01-02-fix.webp" />
               <span>???</span>
             `
           }
         </button>
       </div>
 
-      <div class="area-line">
-        <button class="area-button" onclick="onAreaButtonClick(2)"
-          ${isAreaCompleted('01-02')
+      <div class="map-line">
+        <button class="map-button ${isMapCompleted('01-03') ? `completed` : ''}" onclick="onMapButtonClick(2)"
+          ${isMapCompleted('01-02')
             ? `>
-              <img src="./medias/images/areas/01-03/01-03-fix.webp" />
+              <img src="./medias/images/maps/01-03/01-03-fix.webp" />
               <span>lac Baïkal</span>
             ` 
             : `disabled>
-              <img src="./medias/images/areas/01-03/01-03-fix.webp" />
+              <img src="./medias/images/maps/01-03/01-03-fix.webp" />
               <span>???</span>
             `
           }
         </button>
-        <button class="area-button" onclick="onAreaButtonClick(3)"
-        ${isAreaCompleted('01-03')
+        <button class="map-button ${isMapCompleted('01-04') ? `completed` : ''}" onclick="onMapButtonClick(3)"
+        ${isMapCompleted('01-03')
           ? `>
-            <img src="./medias/images/areas/01-04/01-04-fix.webp" />
+            <img src="./medias/images/maps/01-04/01-04-fix.webp" />
             <span>côte<br>méditerranéenne</span>
           ` 
           : `disabled>
-            <img src="./medias/images/areas/01-04/01-04-fix.webp" />
+            <img src="./medias/images/maps/01-04/01-04-fix.webp" />
             <span>???</span>
           `
         }
@@ -1190,54 +1190,54 @@ const getAreaGroupAreaSelector = (groupName) => {
       </div>`;
 
   case 'intermédiaire': return `
-    <div class="area-line">
-      <button class="area-button" onclick="onAreaButtonClick(4)"
-      ${isAreaCompleted('01-04')
+    <div class="map-line">
+      <button class="map-button ${isMapCompleted('02-01') ? `completed` : ''}" onclick="onMapButtonClick(4)"
+      ${isMapCompleted('01-04')
         ? `>
-          <img src="./medias/images/areas/02-01/02-01-fix.webp" />
+          <img src="./medias/images/maps/02-01/02-01-fix.webp" />
           <span>grande barrière<br>de corail</span>
         ` 
         : `disabled>
-          <img src="./medias/images/areas/02-01/02-01-fix.webp" />
+          <img src="./medias/images/maps/02-01/02-01-fix.webp" />
           <span>???</span>
         `
       }
       </button>
-      <button class="area-button" onclick="onAreaButtonClick(5)"
-      ${isAreaCompleted('02-01')
+      <button class="map-button ${isMapCompleted('02-02') ? `completed` : ''}" onclick="onMapButtonClick(5)"
+      ${isMapCompleted('02-01')
         ? `>
-          <img src="./medias/images/areas/02-02/02-02-fix.webp" />
+          <img src="./medias/images/maps/02-02/02-02-fix.webp" />
           <span>rio paranà</span>
         ` 
         : `disabled>
-          <img src="./medias/images/areas/02-02/02-02-fix.webp" />
+          <img src="./medias/images/maps/02-02/02-02-fix.webp" />
           <span>???</span>
         `
       }
       </button>
     </div>
 
-    <div class="area-line">
-      <button class="area-button" onclick="onAreaButtonClick(6)"
-      ${isAreaCompleted('02-02')
+    <div class="map-line">
+      <button class="map-button ${isMapCompleted('02-03') ? `completed` : ''}" onclick="onMapButtonClick(6)"
+      ${isMapCompleted('02-02')
         ? `>
-          <img src="./medias/images/areas/02-03/02-03-fix.webp" />
+          <img src="./medias/images/maps/02-03/02-03-fix.webp" />
           <span>caraïbes</span>
         ` 
         : `disabled>
-          <img src="./medias/images/areas/02-03/02-03-fix.webp" />
+          <img src="./medias/images/maps/02-03/02-03-fix.webp" />
           <span>???</span>
         `
       }
       </button>
-      <button class="area-button" onclick="onAreaButtonClick(7)"
-      ${isAreaCompleted('02-03') 
+      <button class="map-button ${isMapCompleted('02-04') ? `completed` : ''}" onclick="onMapButtonClick(7)"
+      ${isMapCompleted('02-03') 
         ? `>
-          <img src="./medias/images/areas/02-04/02-04-fix.webp" />
+          <img src="./medias/images/maps/02-04/02-04-fix.webp" />
           <span>nil</span>
         ` 
         : `disabled>
-          <img src="./medias/images/areas/02-04/02-04-fix.webp" />
+          <img src="./medias/images/maps/02-04/02-04-fix.webp" />
           <span>???</span>
         `
       }
@@ -1245,54 +1245,54 @@ const getAreaGroupAreaSelector = (groupName) => {
     </div>`;
 
   case 'avancé': return `
-    <div class="area-line">
-      <button class="area-button" onclick="onAreaButtonClick(8)"
-      ${isAreaCompleted('02-04')
+    <div class="map-line">
+      <button class="map-button ${isMapCompleted('03-01') ? `completed` : ''}" onclick="onMapButtonClick(8)"
+      ${isMapCompleted('02-04')
         ? `>
-          <img src="./medias/images/areas/03-01/03-01-fix.webp" />
+          <img src="./medias/images/maps/03-01/03-01-fix.webp" />
           <span>océan<br>pacifique sud</span>
         ` 
         : `disabled>
-          <img src="./medias/images/areas/03-01/03-01-fix.webp" />
+          <img src="./medias/images/maps/03-01/03-01-fix.webp" />
           <span>???</span>
         `
       }
       </button>
-      <button class="area-button" onclick="onAreaButtonClick(9)"
-      ${isAreaCompleted('03-01')
+      <button class="map-button ${isMapCompleted('03-02') ? `completed` : ''}" onclick="onMapButtonClick(9)"
+      ${isMapCompleted('03-01')
         ? `>
-          <img src="./medias/images/areas/03-02/03-02-fix.webp" />
+          <img src="./medias/images/maps/03-02/03-02-fix.webp" />
           <span>congo</span>
         ` 
         : `disabled>
-          <img src="./medias/images/areas/03-02/03-02-fix.webp" />
+          <img src="./medias/images/maps/03-02/03-02-fix.webp" />
           <span>???</span>
         `
       }
       </button>
     </div>
 
-    <div class="area-line">
-      <button class="area-button" onclick="onAreaButtonClick(10)"
-      ${isAreaCompleted('03-02')
+    <div class="map-line">
+      <button class="map-button ${isMapCompleted('03-03') ? `completed` : ''}" onclick="onMapButtonClick(10)"
+      ${isMapCompleted('03-02')
         ? `>
-          <img src="./medias/images/areas/03-03/03-03-fix.webp" />
+          <img src="./medias/images/maps/03-03/03-03-fix.webp" />
           <span>océan indien</span>
         ` 
         : `disabled>
-          <img src="./medias/images/areas/03-03/03-03-fix.webp" />
+          <img src="./medias/images/maps/03-03/03-03-fix.webp" />
           <span>???</span>
         `
       }
       </button>
-      <button class="area-button" onclick="onAreaButtonClick(11)"
-      ${isAreaCompleted('03-03')
+      <button class="map-button ${isMapCompleted('03-04') ? `completed` : ''}" onclick="onMapButtonClick(11)"
+      ${isMapCompleted('03-03')
         ? `>
-          <img src="./medias/images/areas/03-04/03-04-fix.webp" />
+          <img src="./medias/images/maps/03-04/03-04-fix.webp" />
           <span>amazone</span>
         ` 
         : `disabled>
-          <img src="./medias/images/areas/03-04/03-04-fix.webp" />
+          <img src="./medias/images/maps/03-04/03-04-fix.webp" />
           <span>???</span>
         `
       }
@@ -1300,53 +1300,53 @@ const getAreaGroupAreaSelector = (groupName) => {
     </div>`;
   
   case 'expert': return `
-    <div class="area-line">
-      <button class="area-button" onclick="onAreaButtonClick(12)"
-      ${isAreaCompleted('03-04')
+    <div class="map-line">
+      <button class="map-button ${isMapCompleted('04-01') ? `completed` : ''}" onclick="onMapButtonClick(12)"
+      ${isMapCompleted('03-04')
         ? `>
-          <img src="./medias/images/areas/04-01/04-01-fix.webp" />
+          <img src="./medias/images/maps/04-01/04-01-fix.webp" />
           <span>océan<br>atlantique nord</span>
         ` 
         : `disabled>
-          <img src="./medias/images/areas/04-01/04-01-fix.webp" />
+          <img src="./medias/images/maps/04-01/04-01-fix.webp" />
           <span>???</span>
         `
       }
       </button>
-      <button class="area-button" onclick="onAreaButtonClick(13)"
-      ${isAreaCompleted('04-01') ? `>
-          <img src="./medias/images/areas/04-02/04-02-fix.webp" />
+      <button class="map-button ${isMapCompleted('04-02') ? `completed` : ''}" onclick="onMapButtonClick(13)"
+      ${isMapCompleted('04-01') ? `>
+          <img src="./medias/images/maps/04-02/04-02-fix.webp" />
           <span>mekong</span>
         ` 
         : `disabled>
-          <img src="./medias/images/areas/04-02/04-02-fix.webp" />
+          <img src="./medias/images/maps/04-02/04-02-fix.webp" />
           <span>???</span>
         `
       }
       </button>
     </div>
 
-    <div class="area-line">
-      <button class="area-button" onclick="onAreaButtonClick(14)"
-      ${isAreaCompleted('04-02')
+    <div class="map-line">
+      <button class="map-button ${isMapCompleted('04-03') ? `completed` : ''}" onclick="onMapButtonClick(14)"
+      ${isMapCompleted('04-02')
         ? `>
-          <img src="./medias/images/areas/04-03/04-03-fix.webp" />
+          <img src="./medias/images/maps/04-03/04-03-fix.webp" />
           <span>océan austral</span>
         ` 
         : `disabled>
-          <img src="./medias/images/areas/04-03/04-03-fix.webp" />
+          <img src="./medias/images/maps/04-03/04-03-fix.webp" />
           <span>???</span>
         `
       }
       </button>
-      <button class="area-button" onclick="onAreaButtonClick(15)"
-      ${isAreaCompleted('04-03')
+      <button class="map-button ${isMapCompleted('04-04') ? `completed` : ''}" onclick="onMapButtonClick(15)"
+      ${isMapCompleted('04-03')
         ? `>
-          <img src="./medias/images/areas/04-04/04-04-fix.webp" />
+          <img src="./medias/images/maps/04-04/04-04-fix.webp" />
           <span>fosse des<br>mariannes</span>
         ` 
         : `disabled>
-          <img src="./medias/images/areas/04-04/04-04-fix.webp" />
+          <img src="./medias/images/maps/04-04/04-04-fix.webp" />
           <span>???</span>
         `
       }
@@ -1356,21 +1356,21 @@ const getAreaGroupAreaSelector = (groupName) => {
   }
 }
 
-const onAreaGroupClick = (groupName) => {
+const onMapGroupClick = (groupName) => {
   onClosePopupClick();
   document.getElementById('main').innerHTML += `
     <div id="popup" class="popup home-screen">
       <div class="popup-top">
         <span>${groupName}</span>
-        <button class="close-popup-button" onclick="onAreaGroupCloseClick()">X</button>
+        <button class="close-popup-button" onclick="onMapGroupCloseClick()">X</button>
       </div>
-      <div class="area-selector">
-        ${getAreaGroupAreaSelector(groupName)}
+      <div class="map-selector">
+        ${getMapGroupMapSelector(groupName)}
       </div>
     </div>
   `;
 }
-window.onAreaGroupClick = onAreaGroupClick;
+window.onMapGroupClick = onMapGroupClick;
 
 const onSettingsClick = () => {
   document.getElementById('main').innerHTML += `
@@ -1401,11 +1401,11 @@ const onCharacterClick = (characterIndex) => {
 }
 window.onCharacterClick = onCharacterClick;
 
-const onAreaButtonClick = (areaIndex) => {
-  currentArea = AREAS[areaIndex];
-  fromHomeToArea(AREAS[areaIndex]);
+const onMapButtonClick = (mapIndex) => {
+  currentMap = MAPS[mapIndex];
+  fromHomeToMap(MAPS[mapIndex]);
 }
-window.onAreaButtonClick = onAreaButtonClick;
+window.onMapButtonClick = onMapButtonClick;
 
 const onRecordsClick = () => {
   let user = getUser();
@@ -1433,7 +1433,7 @@ window.onRecordsClick = onRecordsClick;
 
 const onCabinClick = () => {
   console.log('click cabin');
-  fromHomeToArea();
+  fromHomeToMap();
 }
 window.onCabinClick = onCabinClick;
 
@@ -1447,13 +1447,13 @@ const onClosePopupClick = (popupName) => {
 }
 window.onClosePopupClick = onClosePopupClick;
 
-/* =============================== Area page =============================== */
+/* =============================== Map page =============================== */
 
 // Top part -----------------------------------------
 const onHomeClick = (isFromCabin) => {
 
   if (isFromCabin == true) {
-    leaveArea();
+    leaveMap();
   } else {
     let previousPopup = document.getElementById('popup');
     if (previousPopup != null) {
@@ -1473,7 +1473,7 @@ const onHomeClick = (isFromCabin) => {
           <span>voulez-vous vraiment retourner à l'accueil ?</span>
           <div>
             <button onclick="onClosePopupClick('home')">non</button>
-            <button onclick="leaveArea()">oui</button>
+            <button onclick="leaveMap()">oui</button>
           </div>
         </div>
       </div>
@@ -1483,20 +1483,20 @@ const onHomeClick = (isFromCabin) => {
 }
 window.onHomeClick = onHomeClick;
 
-const leaveArea = () => {
+const leaveMap = () => {
   isSelected = false;
-  AREA_FISHES.forEach(fish => {
+  MAP_FISHES.forEach(fish => {
     clearInterval(fish.intervalId);
   });
   clearInterval(fishGeneration);
-  AREA_FISHES = [];
-  currentAreaCatches = [];
-  fromAreaToHome();
+  MAP_FISHES = [];
+  currentMapCatches = [];
+  fromMapToHome();
 }
-window.leaveArea = leaveArea;
+window.leaveMap = leaveMap;
 
 const onVivierClick = () => {
-  //console.table(currentArea.fishes);
+  //console.table(currentMap.fishes);
   document.getElementById('vivierButton').setAttribute('disabled', true);
   document.getElementById('main').innerHTML += `
     <div id="popup" class="popup vivier">
@@ -1504,7 +1504,7 @@ const onVivierClick = () => {
         <span>vivier</span>
         <button class="close-popup-button" onclick="onClosePopupClick('vivier')">X</button>
       </div>
-      ${renderAreaVivier()}
+      ${renderMapVivier()}
     </div>
   `;
   if (document.getElementById('crossLeft') != null) {
@@ -1629,9 +1629,9 @@ const abortFishing = (cellId) => {
 }
 window.abortFishing = abortFishing;
 
-const continueFishing = (completedAreaId) => {
-  if (completedAreaId != null) {
-    console.log(completedAreaId);
+const continueFishing = (completedMapId) => {
+  if (completedMapId != null) {
+    console.log(completedMapId);
     let previousPopup = document.getElementById('popup');
     if (previousPopup != null) {
       previousPopup.remove();
@@ -1642,28 +1642,28 @@ const continueFishing = (completedAreaId) => {
       <div class="completed-bloc"><span>vous avez attrapé toutes les espèces de poisson disponibles sur cette carte !</span></div>
       
       ${
-        completedAreaId == '01-04' 
+        completedMapId == '01-04' 
         ? `
           <div class="completed-bloc"><span>vous avez complété toutes les cartes la catégorie débutants !</span></div>
           <div class="completed-bloc"><span>vous avez déverrouillé la catégorie intermédiaire !</span></div>`
         : ''
       }
       ${
-        completedAreaId == '02-04' 
+        completedMapId == '02-04' 
         ? `
           <div class="completed-bloc"><span>vous avez complété toutes les cartes la catégorie intermédiaire !</span></div>
           <div class="completed-bloc"><span>vous avez déverrouillé la catégorie avancé !</span></div>`
         : ''
       }
       ${
-        completedAreaId == '03-04' 
+        completedMapId == '03-04' 
         ? `
           <div class="completed-bloc"><span>vous avez complété toutes les cartes la catégorie avancé !</span></div>
           <div class="completed-bloc"><span>vous avez déverrouillé la catégorie expert !</span></div>`
         : ''
       }
       ${
-        completedAreaId == '04-04' 
+        completedMapId == '04-04' 
         ? `
           <div class="completed-bloc"><span>vous avez complété toutes les cartes la catégorie expert !</span></div>
           <div class="completed-bloc">
@@ -1676,10 +1676,10 @@ const continueFishing = (completedAreaId) => {
         : ''
       }
       ${
-        completedAreaId == '01-01' || completedAreaId == '01-02' || completedAreaId == '01-03' ||
-        completedAreaId == '02-01' || completedAreaId == '02-02' || completedAreaId == '02-03' ||
-        completedAreaId == '03-01' || completedAreaId == '03-02' || completedAreaId == '03-03' ||
-        completedAreaId == '04-01' || completedAreaId == '04-02' || completedAreaId == '04-03'
+        completedMapId == '01-01' || completedMapId == '01-02' || completedMapId == '01-03' ||
+        completedMapId == '02-01' || completedMapId == '02-02' || completedMapId == '02-03' ||
+        completedMapId == '03-01' || completedMapId == '03-02' || completedMapId == '03-03' ||
+        completedMapId == '04-01' || completedMapId == '04-02' || completedMapId == '04-03'
         ? `<div class="completed-bloc"><span>Vous avez déverrouillé la prochaine carte de cette catégorie !</span></div>`
         : ''
       }
@@ -1767,6 +1767,19 @@ const handleCheck = (id) => {
 };
 window.handleCheck = handleCheck;
 
+const sortFishesByScientificName = (fishes) => {
+  //console.table(fishes);
+  fishes.sort((a, b) => {
+    if (a.scientificName < b.scientificName)
+      return -1;
+    if (a.scientificName > b.scientificName )
+        return 1;
+    return 0;
+  });
+  //console.table(fishes);
+  return fishes;
+}
+
 /* ========================================================================= */
 /* =============================== EXECUTION =============================== */
 /* ========================================================================= */
@@ -1775,24 +1788,37 @@ setStorage();
 if (getUserSetting('keepScreenAwake').isActive) { await requestWakeLock(); }
 
 const USER = getUser();
+let map17Fishes = [];
+for (let index = 0; index < 16; index++) {
+  const map = MAPS[index];
+  map.fishes.forEach(fish => {
+    map17Fishes.push(fish);
+  });
+}
+MAPS[16].fishes = sortFishesByScientificName(map17Fishes);
 
-let currentArea = AREAS[0];
-let currentAreaCatches = [];
+MAPS.forEach(map => {
+  map.fishes = sortFishesByScientificName(map.fishes);
+});
+//console.table(MAPS[16].fishes);
+
+let currentMap = MAPS[0];
+let currentMapCatches = [];
 let currentRod = USER.currentRod;
 
 let isSelected = false;
 let fishGeneration = '';
 
 let currentCharacterId = CHARACTERS[USER.currentCharacter];
-let currentPlayerLineLetterIndex = currentArea.spawnLine - 1;
-let currentPlayerColumn = currentArea.spawnColumn;
+let currentPlayerLineLetterIndex = currentMap.spawnLine - 1;
+let currentPlayerColumn = currentMap.spawnColumn;
 
 let isPlayerMoving = false;
 let currentCharacter = getCurrentPlayerSprites();
 let isOnRightFoot = true;
 
 let fishes = 0;
-let AREA_FISHES = [];
+let MAP_FISHES = [];
 const fishImages = {
   front: `./medias/images/characters/fish-front.webp`,
   back: `./medias/images/characters/fish-back.webp`,
@@ -1804,44 +1830,44 @@ openAppCinematic(true);
 
 // ------------------------------------------------------------------------------------
 
-const hasFishAlreadyBeenCatched = (fishId) => {
-  let hasBeenCatched = false;
+const hasFishAlreadyBeenCaught = (fishId) => {
+  let hasBeenCaught = false;
   let user = getUser();
   
-  user.catches.forEach(catchedFish => {
-    if (catchedFish.fishId == fishId) {
-      hasBeenCatched =  true;
+  user.catches.forEach(caughtFish => {
+    if (caughtFish.fishId == fishId && caughtFish.mapId == currentMap.id) {
+      hasBeenCaught =  true;
     }
   });
 
-  return hasBeenCatched;
+  return hasBeenCaught;
 }
 
-const haveAllAreaFishesHaveBeenCaught = (areaId) => {
-  let areaToAnalyse = '';
-  AREAS.forEach(area => {
-    if (area.id == areaId) {
-      areaToAnalyse = area;
+const haveAllMapFishesHaveBeenCaught = (mapId) => {
+  let mapToAnalyse = '';
+  MAPS.forEach(map => {
+    if (map.id == mapId) {
+      mapToAnalyse = map;
     }
   });
 
-  let uncatched = 0;
+  let uncaught = 0;
 
-  areaToAnalyse.fishes.forEach(areaFish => {
-    if (!hasFishAlreadyBeenCatched(areaFish.id)) {
-      uncatched += 1;
+  mapToAnalyse.fishes.forEach(mapFish => {
+    if (!hasFishAlreadyBeenCaught(mapFish.id)) {
+      uncaught += 1;
     }
   });
 
-  return uncatched == 0;
+  return uncaught == 0;
 }
 
-const isAreaCompleted = (areaId) => {
+const isMapCompleted = (mapId) => {
   let isCompleted = false;
   let user = getUser();
 
-  user.completedAreas.forEach(completedArea => {
-    if (completedArea == areaId) {
+  user.completedMaps.forEach(completedMap => {
+    if (completedMap == mapId) {
       isCompleted =  true;
     }
   });
