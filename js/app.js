@@ -1558,7 +1558,6 @@ window.onMapButtonClick = onMapButtonClick;
 
 const getRecordFish = (mapId, fishId) => {
   let user = getUser();
-  const MAP = getMapById(mapId);
   const allFishes = [];
   user.catches.forEach(fish => {
     if (fish.mapId == mapId && fish.fishId == fishId) {
@@ -1567,10 +1566,10 @@ const getRecordFish = (mapId, fishId) => {
   });
   if (allFishes.length != 0) {
     allFishes.sort((a, b) => {
-      if (a.mass < b.mass)
-        return -1;
-      if (a.mass > b.mass )
+      if (a.fishMass < b.fishMass)
         return 1;
+      if (a.fishMass > b.fishMass )
+        return -1;
       return 0;
     });
     return allFishes[0];
@@ -1587,13 +1586,25 @@ const getRecordFish = (mapId, fishId) => {
 
 const getMapRecords = (mapId) => {
   const MAP = getMapById(mapId);
-  const allFishes = [];
+  let allFishes = [];
   MAP.fishes.forEach(fish => {
     const recordFish = getRecordFish(mapId, fish.id);
     if (recordFish.fishId != 0) {
       allFishes.push(recordFish);
     }
   });
+  if (allFishes.length != 0) {
+    //console.log(allFishes.length);
+    //console.table(allFishes);
+    allFishes.sort((a, b) => {
+      if (a.fishMass < b.fishMass)
+        return 1;
+      if (a.fishMass > b.fishMass )
+        return -1;
+      return 0;
+    });
+    //console.table(allFishes);
+  }
   return allFishes;
 }
 
