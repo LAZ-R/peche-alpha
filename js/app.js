@@ -52,6 +52,7 @@ const maxFishMovement = 64;
 /* ############################### Home page ############################### */
 
 const renderHomeTemplate = () => {
+  let user = getUser();
   document.getElementById('main').innerHTML = `
   <div id="topArea" class="top-area">
     <span style="width: 90px;"></span>
@@ -61,7 +62,7 @@ const renderHomeTemplate = () => {
     <div id="screenArea" class="screen-area home-screen">
       <div id="homeButtonsArea" class="home-buttons-area">
         <button id="playButton" class="home-screen-button" onclick="onPlayClick()">jouer</button>
-        <button id="recordsButton" class="home-screen-button" onclick="onRecordsClick()">records</button>
+        <button id="recordsButton" class="home-screen-button" onclick="onRecordsClick()" ${user.catches.length == 0 ? 'disabled' : ''}>records</button>
         <button id="cabinButton" onclick="onCabinClick()">cabane</button>
       </div>
     </div>
@@ -71,10 +72,11 @@ const renderHomeTemplate = () => {
   `;
 }
 
-const openAppCinematic = (isHome) => {
+const openAppCinematic = (isAppOpening) => {
+  let user = getUser();
   renderHomeTemplate();
 
-  if (isHome) {
+  if (isAppOpening) {
     document.getElementById('cabinButton').setAttribute('disabled', true);
     document.getElementById('topArea').style.opacity = 0;
     document.getElementById('playButton').style.opacity = 0;
@@ -85,7 +87,7 @@ const openAppCinematic = (isHome) => {
     document.getElementById('versionNumber').style.opacity = 0;
   }
   
-  if (isHome) {
+  if (isAppOpening) {
     document.getElementById('main').style.opacity = 1;
   } else {
     setTimeout(() => {
@@ -93,7 +95,7 @@ const openAppCinematic = (isHome) => {
     }, 500);
   }
 
-  if (isHome) {
+  if (isAppOpening) {
     setTimeout(() => {
       document.getElementById('screenArea').style.opacity = 1;
       document.getElementById('buttonsArea').style.opacity = 1;
@@ -102,7 +104,7 @@ const openAppCinematic = (isHome) => {
         setTimeout(() => { 
           document.getElementById('playButton').style.opacity = 1;
           setTimeout(() => { 
-            document.getElementById('recordsButton').style.opacity = 1;
+            document.getElementById('recordsButton').style.opacity = user.catches.length != 0 ? 1 : .5;
             setTimeout(() => {
               document.getElementById('versionNumber').style.opacity = 1;
               document.getElementById('cabinButton').removeAttribute('disabled');
@@ -159,7 +161,7 @@ const defineCabin = () => {
 
   let user = getUser();
 
-  console.log(user.catches.length);
+  //console.log(user.catches.length);
   
   document.getElementById('screenArea').innerHTML = `
   <div id="cabinPopup" class="cabin-popup">
