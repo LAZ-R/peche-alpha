@@ -635,8 +635,8 @@ main {
               color: var(--grey-60);
 
               > img {
-                /* filter: brightness(0); */
-                filter: grayscale(.75) brightness(.75) /* sepia(.2) */;
+                filter: grayscale(.5) brightness(.8) sepia(.1);
+                opacity: .9;
               }
               
 
@@ -809,7 +809,7 @@ main {
 
           &.uncaught {
             opacity: .5;
-            filter: grayscale(1);
+            filter: brightness(0);
           }
 
           & > img {
@@ -948,15 +948,51 @@ main {
 
     .completed-bloc {
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       padding: calc(var(--cell-size) / 2);
+      gap: calc(var(--cell-size) / 2);
       /* border: 2px solid hsl(36, 100%, 56%); */
       border-radius: 4px;
       animation: blink-border .5s infinite;
-      font-size: 12px;
+      font-size: 14px;
+
+      & > img {
+        width: calc(var(--cell-size) * 2);
+
+        &.rod-2 {
+          animation: rod-2 1s infinite;
+        }
+
+        &.rod-3 {
+          animation: rod-3 .5s infinite;
+        }
+      }
     }
   }
+}
+
+@keyframes rod-2 {
+  0%   { filter: hue-rotate(45deg); }
+  50%  { filter: hue-rotate(-90deg); }
+  100% { filter: hue-rotate(45deg); }
+}
+
+@keyframes rod-3 {
+  0%   { filter: hue-rotate(0deg); }
+  5%   { filter: hue-rotate(30deg); }
+  10%  { filter: hue-rotate(60deg); }
+  15%  { filter: hue-rotate(90deg); }
+  35%  { filter: hue-rotate(120deg); }
+  45%  { filter: hue-rotate(150deg); }
+  50%  { filter: hue-rotate(180deg); }
+  55%  { filter: hue-rotate(210deg); }
+  65%  { filter: hue-rotate(240deg); }
+  85%  { filter: hue-rotate(270deg); }
+  90%  { filter: hue-rotate(300deg); }
+  95%  { filter: hue-rotate(330deg); }
+  100% { filter: hue-rotate(360deg); }
 }
 
 .notation-area {
@@ -1008,16 +1044,22 @@ main {
   }
 
   .character-selector {
+    --size: calc(100% - calc(var(--cell-size) * 2));
+
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
     width: 100%;
-    height: fit-content;
+    min-height: var(--size); height: var(--size); max-height: var(--size);
     /* background-color: aqua; */
     gap: var(--cell-size);
+    overflow: hidden;
+    overflow-y: scroll;
+    /* background-color: magenta; */
 
     .character-line {
+      position: relative;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -1026,7 +1068,29 @@ main {
       /* background-color: magenta; */
       gap: var(--cell-size);
 
+      &.disabled {
+        &::after {
+          position: absolute;
+          content: "0";
+          background-color: black;
+          padding: calc(var(--cell-size) / 2);
+          font-size: 12px;
+        }
+
+        &.d-100 { &::after { content: "attrape 100 poissons"; } }
+        &.d-200 { &::after { content: "attrape 200 poissons"; } }
+        &.d-300 { &::after { content: "attrape 300 poissons"; } }
+        &.d-400 { &::after { content: "attrape 400 poissons"; } }
+        &.d-500 { &::after { content: "attrape 500 poissons"; } }
+        &.d-600 { &::after { content: "attrape 600 poissons"; } }
+        &.d-700 { &::after { content: "attrape 700 poissons"; } }
+        &.d-800 { &::after { content: "attrape 800 poissons"; } }
+        &.d-900 { &::after { content: "attrape 900 poissons"; } }
+        &.d-1000 { &::after { content: "attrape 1000 poissons"; } }
+      }
+
       .character-button {
+        position: relative;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -1035,6 +1099,13 @@ main {
         background-color: #000000a9;
         border-radius: 4px;
         border: 2px solid var(--grey-60);
+
+        &>span {
+          position: absolute;
+          bottom: 2px;
+          color: var(--grey-30);
+          font-size: 12px;
+        }
 
         &:disabled {
           opacity: .5;

@@ -23,6 +23,16 @@ export const setStorage = () => {
       currentRod: 1,
       catches: [],
       completedMaps: [],
+      // Canne niveau 2
+      /* completedMaps: [
+        '01-01', '01-02', '01-03'
+      ], */
+      // Canne niveau 3
+      /* completedMaps: [
+        '01-01', '01-02', '01-03', '01-04',
+        '02-01', '02-02', '02-03', '02-04',
+        '03-01', '03-02', '03-03', 
+      ], */
       /* completedMaps: [
         '01-01', '01-02', '01-03', '01-04',
         '02-01', '02-02', '02-03', '02-04',

@@ -48,9 +48,6 @@ const renderHomeTemplate = () => {
   `;
 }
 
-/* const home_music = new Audio('.');
-home_music.preload(); */
-
 const openAppCinematic = (isHome) => {
   renderHomeTemplate();
 
@@ -138,22 +135,56 @@ const defineCabin = () => {
   `;
 
   let user = getUser();
-  
-  user.currentCharacter
 
+  console.log(user.catches.length);
   
   document.getElementById('screenArea').innerHTML = `
   <div id="cabinPopup" class="cabin-popup">
   <span>personnage</span>
     <div class="character-selector">
       <div class="character-line">
-        <button id="char0" onclick="onCharacterClick(0)" class="character-button ${user.currentCharacter == 0 ? 'selected' : ''}"><img src="./medias/images/characters/fm-front.png" /></button>
-        <button id="char1" onclick="onCharacterClick(1)" class="character-button ${user.currentCharacter == 1 ? 'selected' : ''}"><img src="./medias/images/characters/fw-front.png" /></button>
+        <button id="char0" onclick="onCharacterClick(0)" class="character-button ${user.currentCharacter == 0 ? 'selected' : ''}"><img src="./medias/images/characters/fm-front.png" /><span>Louis</span></button>
+        <button id="char1" onclick="onCharacterClick(1)" class="character-button ${user.currentCharacter == 1 ? 'selected' : ''}"><img src="./medias/images/characters/fw-front.png" /><span>Sophie</span></button>
       </div>
-      <!-- <div class="character-line">
+      <div class="character-line ${user.catches.length >= 100 ? '' : ` disabled d-100`}">
         <button id="char2" onclick="onCharacterClick(2)" class="character-button ${user.currentCharacter == 2 ? 'selected' : ''}" disabled><img src="./medias/images/characters/ch-front.png" /></button>
         <button id="char3" onclick="onCharacterClick(3)" class="character-button ${user.currentCharacter == 3 ? 'selected' : ''}" disabled><img src="./medias/images/characters/sa-front.png" /></button>
-      </div> -->
+      </div>
+      <div class="character-line ${user.catches.length >= 200 ? '' : ` disabled d-200`}">
+        <button id="char2" onclick="onCharacterClick(2)" class="character-button ${user.currentCharacter == 2 ? 'selected' : ''}" disabled><img src="./medias/images/characters/ch-front.png" /></button>
+        <button id="char3" onclick="onCharacterClick(3)" class="character-button ${user.currentCharacter == 3 ? 'selected' : ''}" disabled><img src="./medias/images/characters/sa-front.png" /></button>
+      </div>
+      <div class="character-line ${user.catches.length >= 300 ? '' : ` disabled d-300`}">
+        <button id="char2" onclick="onCharacterClick(2)" class="character-button ${user.currentCharacter == 2 ? 'selected' : ''}" disabled><img src="./medias/images/characters/ch-front.png" /></button>
+        <button id="char3" onclick="onCharacterClick(3)" class="character-button ${user.currentCharacter == 3 ? 'selected' : ''}" disabled><img src="./medias/images/characters/sa-front.png" /></button>
+      </div>
+      <div class="character-line ${user.catches.length >= 400  ? '' : ` disabled d-400`}">
+        <button id="char2" onclick="onCharacterClick(2)" class="character-button ${user.currentCharacter == 2 ? 'selected' : ''}" disabled><img src="./medias/images/characters/ch-front.png" /></button>
+        <button id="char3" onclick="onCharacterClick(3)" class="character-button ${user.currentCharacter == 3 ? 'selected' : ''}" disabled><img src="./medias/images/characters/sa-front.png" /></button>
+      </div>
+      <div class="character-line ${user.catches.length >= 500 ? '' : ` disabled d-500`}">
+        <button id="char2" onclick="onCharacterClick(2)" class="character-button ${user.currentCharacter == 2 ? 'selected' : ''}" disabled><img src="./medias/images/characters/ch-front.png" /></button>
+        <button id="char3" onclick="onCharacterClick(3)" class="character-button ${user.currentCharacter == 3 ? 'selected' : ''}" disabled><img src="./medias/images/characters/sa-front.png" /></button>
+      </div>
+      <div class="character-line ${user.catches.length >= 600 ? '' : ` disabled d-600`}">
+        <button id="char2" onclick="onCharacterClick(2)" class="character-button ${user.currentCharacter == 2 ? 'selected' : ''}" disabled><img src="./medias/images/characters/ch-front.png" /></button>
+        <button id="char3" onclick="onCharacterClick(3)" class="character-button ${user.currentCharacter == 3 ? 'selected' : ''}" disabled><img src="./medias/images/characters/sa-front.png" /></button>
+      </div>
+      <div class="character-line ${user.catches.length >= 700 ? '' : ` disabled d-700`}">
+        <button id="char2" onclick="onCharacterClick(2)" class="character-button ${user.currentCharacter == 2 ? 'selected' : ''}" disabled><img src="./medias/images/characters/ch-front.png" /></button>
+        <button id="char3" onclick="onCharacterClick(3)" class="character-button ${user.currentCharacter == 3 ? 'selected' : ''}" disabled><img src="./medias/images/characters/sa-front.png" /></button>
+      </div>
+      <div class="character-line ${user.catches.length >= 800 ? '' : ` disabled d-800`}">
+        <button id="char2" onclick="onCharacterClick(2)" class="character-button ${user.currentCharacter == 2 ? 'selected' : ''}" disabled><img src="./medias/images/characters/ch-front.png" /></button>
+        <button id="char3" onclick="onCharacterClick(3)" class="character-button ${user.currentCharacter == 3 ? 'selected' : ''}" disabled><img src="./medias/images/characters/sa-front.png" /></button>
+      </div>
+      <div class="character-line ${user.catches.length >= 900 ? '' : ` disabled d-900`}">
+        <button id="char2" onclick="onCharacterClick(2)" class="character-button ${user.currentCharacter == 2 ? 'selected' : ''}" disabled><img src="./medias/images/characters/ch-front.png" /></button>
+        <button id="char3" onclick="onCharacterClick(3)" class="character-button ${user.currentCharacter == 3 ? 'selected' : ''}" disabled><img src="./medias/images/characters/sa-front.png" /></button>
+      </div>
+      <div class="character-line ${user.catches.length >= 1000 ? '' : ` disabled d-1000`}">
+        <button id="char2" onclick="onCharacterClick(2)" class="character-button ${user.currentCharacter == 2 ? 'selected' : ''}" disabled><img src="./medias/images/characters/ch-front.png" /><span>M. Wade</span></button>
+      </div>
     </div>
   </div>`;
 
@@ -165,9 +196,7 @@ const defineCabin = () => {
 const defineMap = (map) => {
   //menuMusic.currentTime = 0;
   menuMusic.pause();
-  if (getUserSetting('mapsMusic').isActive) {
-    mapMusic = new Audio(`./medias/music/${currentMap.id}.mp3`);
-  }
+  mapMusic = new Audio(`./medias/music/${currentMap.id}.mp3`);
   mapMusic.loop = true;
   mapMusic.addEventListener("canplaythrough", (event) => {
     if (getUserSetting('mapsMusic').isActive) {
@@ -178,6 +207,7 @@ const defineMap = (map) => {
   if (getUserSetting('soundEffects').isActive) {
     mapBackgroundSound = new Audio(`./medias/sounds/calm-water.mp3`);
     mapBackgroundSound.play();
+    mapBackgroundSound.loop = true;
   }
   renderBlankTemplate();
   currentMap = map;
@@ -709,12 +739,16 @@ const moveFish = (fish, direction) => {
   const checkSelected = (nextCell, FISH) => {
     if (document.getElementById(nextCell).classList.contains('selected')) {
       document.getElementById(nextCell).classList.replace('selected', 'touched');
-      new Audio('./medias/sounds/splash-loud.mp3').play();
+      fishBiteSound.play();
+
       clearInterval(fish.intervalId);
       FISH.style.opacity = 1;
+
       document.getElementById('buttonsArea').innerHTML = ``;
 
       setTimeout(() => {
+        FISH.style.opacity = 0;
+        FISH.remove();
         launchBattle(FISH);
       }, 500);
     }
@@ -974,15 +1008,14 @@ const getNotationImages = (notation) => {
 
 // Battle -------------------------
 
-const launchBattle = (domFish) => {
-  let rodSound = new Audio('./medias/sounds/remontee.mp3');
+const launchBattle = () => {
   document.getElementById('vivierButton').setAttribute('disabled', true);
   if (getUserSetting('soundEffects').isActive) {
-    rodSound.play();
+    rewindRodSound.currentTime = 0;
+    rewindRodSound.play();
   }
   isSelected = false;
   clearPlayerAvailableCells();
-  domFish.remove();
 
   document.getElementById('buttonsArea').innerHTML = '';
 
@@ -1012,13 +1045,13 @@ const launchBattle = (domFish) => {
   `;
 
   setTimeout(() => {
-    rodSound.pause();
+    rewindRodSound.pause();
     let rnd = Math.random();
     let justCompletedTheMap = false;
     
-    if (rnd > 0.75) { // Bataille foirée
+    if (rnd > 0.75) { // Bataille foirée --------------------------------------
       if (getUserSetting('soundEffects').isActive) {
-        new Audio('./medias/sounds/fail2.mp3').play();
+        failedBattleSound.play();
       }
       // récupération message aléatoire
       const failMessages = [
@@ -1037,7 +1070,7 @@ const launchBattle = (domFish) => {
       document.getElementById('popup').innerHTML = `
         <span>${failMessages[randomIntFromInterval(0, failMessages.length - 1)]}</span>
       `;
-    } else { // Bataille gagnée
+    } else { // Bataille gagnée -----------------------------------------------
       // récupération message aléatoire
       
       const INDIVIDUAL = getRandomIndividual(getRandomMapFishType());
@@ -1052,9 +1085,9 @@ const launchBattle = (domFish) => {
 
       if (getUserSetting('soundEffects').isActive) {
         if (hasRecord) {
-          new Audio('./medias/sounds/success2.mp3').play();
+          recordBattleSound.play();
         } else {
-          new Audio('./medias/sounds/success1.mp3').play();
+          wonBattleSound.play();
         }
       }
 
@@ -1116,7 +1149,7 @@ const launchBattle = (domFish) => {
 
     }
     setPlayerAvailableCells();
-    document.getElementById('buttonsArea').innerHTML = `<button class="continue-button" onclick="continueFishing(${justCompletedTheMap ? `'${currentMap.id}'` : ''})">continuer</button>`;
+    document.getElementById('buttonsArea').innerHTML = `<button class="continue-button" onclick="${justCompletedTheMap ? `setCompletedMapPopup('${currentMap.id}')` : `continueFishing()`}">continuer</button>`;
   }, 3500);
 }
 
@@ -1241,7 +1274,7 @@ const getMapGroupMapSelector = (groupName) => {
           ${isMapCompleted('01-02')
             ? `>
               <img src="./medias/images/maps/01-03/01-03-fix.webp" />
-              <span>lac Baïkal</span>
+              <span>côte<br>méditerranéenne</span>
             ` 
             : `disabled>
               <img src="./medias/images/maps/01-03/01-03-fix.webp" />
@@ -1253,7 +1286,7 @@ const getMapGroupMapSelector = (groupName) => {
         ${isMapCompleted('01-03')
           ? `>
             <img src="./medias/images/maps/01-04/01-04-fix.webp" />
-            <span>côte<br>méditerranéenne</span>
+            <span>grande barrière<br>de corail</span>
           ` 
           : `disabled>
             <img src="./medias/images/maps/01-04/01-04-fix.webp" />
@@ -1269,7 +1302,7 @@ const getMapGroupMapSelector = (groupName) => {
       ${isMapCompleted('01-04')
         ? `>
           <img src="./medias/images/maps/02-01/02-01-fix.webp" />
-          <span>grande barrière<br>de corail</span>
+          <span>lac tanganyiaka</span>
         ` 
         : `disabled>
           <img src="./medias/images/maps/02-01/02-01-fix.webp" />
@@ -1281,7 +1314,7 @@ const getMapGroupMapSelector = (groupName) => {
       ${isMapCompleted('02-01')
         ? `>
           <img src="./medias/images/maps/02-02/02-02-fix.webp" />
-          <span>rio paranà</span>
+          <span>caraïbes</span>
         ` 
         : `disabled>
           <img src="./medias/images/maps/02-02/02-02-fix.webp" />
@@ -1296,7 +1329,7 @@ const getMapGroupMapSelector = (groupName) => {
       ${isMapCompleted('02-02')
         ? `>
           <img src="./medias/images/maps/02-03/02-03-fix.webp" />
-          <span>caraïbes</span>
+          <span>rio paranà</span>
         ` 
         : `disabled>
           <img src="./medias/images/maps/02-03/02-03-fix.webp" />
@@ -1308,7 +1341,7 @@ const getMapGroupMapSelector = (groupName) => {
       ${isMapCompleted('02-03') 
         ? `>
           <img src="./medias/images/maps/02-04/02-04-fix.webp" />
-          <span>nil</span>
+          <span>lac baïkal</span>
         ` 
         : `disabled>
           <img src="./medias/images/maps/02-04/02-04-fix.webp" />
@@ -1696,7 +1729,7 @@ const onCellClick = (cellId) => {
     if (CELL.classList.contains('selectable')) {
       CELL.classList.replace('selectable', 'selected');
       if (getUserSetting('soundEffects').isActive) {
-        new Audio('./medias/sounds/splash3.mp3').play();
+        launchRodSound.play();
       }
       isSelected = true;
 
@@ -1717,7 +1750,7 @@ const abortFishing = (cellId) => {
   //console.log(cellId);
   if (isSelected) {
     if (getUserSetting('soundEffects').isActive) {
-      new Audio('./medias/sounds/cancel.mp3').play();
+      cancelFishingSound.play();
     }
     const CELL = document.getElementById(cellId);
     if (CELL.classList.contains('selected')) {
@@ -1733,77 +1766,144 @@ const abortFishing = (cellId) => {
 }
 window.abortFishing = abortFishing;
 
-const continueFishing = (completedMapId) => {
+const continueFishing = () => {
   if (getUserSetting('soundEffects').isActive) {
     buttonClickSound.play();
   }
-  if (completedMapId != null) {
-    console.log(completedMapId);
-    let previousPopup = document.getElementById('popup');
-    if (previousPopup != null) {
-      previousPopup.remove();
-    }
-    document.getElementById('main').innerHTML += `
-    <div id="popup" class="popup">
-      <span>félicitations</span>
-      <div class="completed-bloc"><span>vous avez attrapé toutes les espèces de poisson disponibles sur cette carte !</span></div>
-      
-      ${
-        completedMapId == '01-04' 
-        ? `
-          <div class="completed-bloc"><span>vous avez complété toutes les cartes la catégorie débutants !</span></div>
-          <div class="completed-bloc"><span>vous avez déverrouillé la catégorie intermédiaire !</span></div>`
-        : ''
-      }
-      ${
-        completedMapId == '02-04' 
-        ? `
-          <div class="completed-bloc"><span>vous avez complété toutes les cartes la catégorie intermédiaire !</span></div>
-          <div class="completed-bloc"><span>vous avez déverrouillé la catégorie avancé !</span></div>`
-        : ''
-      }
-      ${
-        completedMapId == '03-04' 
-        ? `
-          <div class="completed-bloc"><span>vous avez complété toutes les cartes la catégorie avancé !</span></div>
-          <div class="completed-bloc"><span>vous avez déverrouillé la catégorie expert !</span></div>`
-        : ''
-      }
-      ${
-        completedMapId == '04-04' 
-        ? `
-          <div class="completed-bloc"><span>vous avez complété toutes les cartes la catégorie expert !</span></div>
-          <div class="completed-bloc">
-            <span>
-              vous avez complété toutes les catégories de la campagne de la Grand' Pêche !<br>
-              vous êtes l'élite de la pêche mondiale !
-            </span>
-          </div>
-          <div class="completed-bloc"><span>vous avez déverrouillé les cartes bonus de la Grand' Pêche !</span></div>`
-        : ''
-      }
-      ${
-        completedMapId == '01-01' || completedMapId == '01-02' || completedMapId == '01-03' ||
-        completedMapId == '02-01' || completedMapId == '02-02' || completedMapId == '02-03' ||
-        completedMapId == '03-01' || completedMapId == '03-02' || completedMapId == '03-03' ||
-        completedMapId == '04-01' || completedMapId == '04-02' || completedMapId == '04-03'
-        ? `<div class="completed-bloc"><span>Vous avez déverrouillé la prochaine carte de cette catégorie !</span></div>`
-        : ''
-      }
-    </div>`;
-    document.getElementById('buttonsArea').innerHTML = `<button class="continue-button" onclick="continueFishing()">continuer</button>`;
-  } else {
-    isSelected = false;
-    document.getElementById('buttonsArea').innerHTML = '';
-    document.getElementById('buttonsArea').innerHTML = `
+  isSelected = false;
+  document.getElementById('buttonsArea').innerHTML = '';
+  document.getElementById('buttonsArea').innerHTML = `
     ${getCrossContainer()}
-    ${getHistoryContainer()}`;
-    setTouchEventCross();
-    document.getElementById('popup').remove();
-    document.getElementById('vivierButton').removeAttribute('disabled');
-  }
+    ${getHistoryContainer()}
+  `;
+  setPlayerAvailableCells();
+  setTouchEventCross();
+  document.getElementById('popup').remove();
+  document.getElementById('vivierButton').removeAttribute('disabled');
 }
 window.continueFishing = continueFishing;
+
+const setCompletedMapPopup = (completedMapId, isUnlock) => {
+  if (getUserSetting('soundEffects').isActive) {
+    buttonClickSound.play();
+  }
+  let user = getUser();
+  console.log(completedMapId);
+  let previousPopup = document.getElementById('popup');
+  if (previousPopup != null) {
+    previousPopup.remove();
+  };
+  if (completedMapId == '01-04') {
+    user.currentRod = 2;
+    setUser(user);
+    currentRod = 2;
+  } else if (completedMapId == '03-04') {
+    user.currentRod = 3;
+    setUser(user);
+    currentRod = 3;
+  };
+  
+  document.getElementById('main').innerHTML += `
+  <div id="popup" class="popup">
+    <span>félicitations</span>
+    <div class="completed-bloc"><span>vous avez attrapé toutes les espèces de poisson disponibles sur cette carte !</span></div>
+    ${ completedMapId == '01-04' ? 
+      `<div class="completed-bloc"><span>vous avez complété toutes les cartes la catégorie débutants !</span></div>` : ''
+    }
+    ${ completedMapId == '02-04' ? 
+      `<div class="completed-bloc"><span>vous avez complété toutes les cartes la catégorie intermédiaire !</span></div>` : ''
+    }
+    ${ completedMapId == '03-04' ? 
+      `<div class="completed-bloc"><span>vous avez complété toutes les cartes la catégorie avancé !</span></div>` : ''
+    }
+    ${ completedMapId == '04-04' ? 
+      `<div class="completed-bloc"><span>vous avez complété toutes les cartes la catégorie expert !</span></div>`: ''
+    }
+    ${
+      completedMapId == '01-01' || completedMapId == '01-02' || completedMapId == '01-03' ||
+      completedMapId == '02-01' || completedMapId == '02-02' || completedMapId == '02-03' ||
+      completedMapId == '03-01' || completedMapId == '03-02' || completedMapId == '03-03' ||
+      completedMapId == '04-01' || completedMapId == '04-02' || completedMapId == '04-03'
+      ? `<div class="completed-bloc"><span>Vous avez déverrouillé la prochaine carte de cette catégorie !</span></div>`
+      : ''
+    }
+  </div>`;
+  
+  if (completedMapId == '01-04' ||
+    completedMapId == '02-04' ||
+    completedMapId == '03-04' ||
+    completedMapId == '04-04') {
+    document.getElementById('buttonsArea').innerHTML = `<button class="continue-button" onclick="setRewardsPopup('${completedMapId}')">récompense(s)</button>`;
+  } else {
+    document.getElementById('buttonsArea').innerHTML = `<button class="continue-button" onclick="continueFishing()">continuer</button>`;
+  }
+}
+window.setCompletedMapPopup = setCompletedMapPopup;
+
+const setRewardsPopup = (completedMapId) => {
+  if (getUserSetting('soundEffects').isActive) {
+    buttonClickSound.play();
+  }
+  console.log(completedMapId);
+  let previousPopup = document.getElementById('popup');
+  if (previousPopup != null) {
+    previousPopup.remove();
+  };
+
+  if (completedMapId == '04-04') {
+    if (getUserSetting('soundEffects').isActive) {
+      finishedGameSound.play();
+    }
+  }
+  
+  document.getElementById('main').innerHTML += `
+  <div id="popup" class="popup">
+    <span>félicitations</span>
+    ${ completedMapId == '01-04' 
+      ? `<div class="completed-bloc"><span>vous avez déverrouillé la catégorie intermédiaire !</span></div>` : ''
+    } ${ completedMapId == '01-04-unlock'
+      ? `<div class="completed-bloc">
+          <span>vous avez déverrouillé</span>
+          <img class="rod-2" src="./medias/images/fishing-rod.png"/>
+          <span>la canne à pêche de niveau 2 !</span>
+        </div>` : ''
+    }
+
+    ${ completedMapId == '02-04' 
+      ? `<div class="completed-bloc"><span>vous avez déverrouillé la catégorie avancé !</span></div>` : ''
+    } ${ completedMapId == '02-04-unlock' 
+      ? `<div class="completed-bloc"><span>vous avez déverrouillé ????? !</span></div>` : ''
+    }
+
+    ${ completedMapId == '03-04' 
+      ? `<div class="completed-bloc"><span>vous avez déverrouillé la catégorie expert !</span></div>` : ''
+    } ${ completedMapId == '03-04-unlock' 
+      ? `<div class="completed-bloc">
+          <span>vous avez déverrouillé</span>
+          <img class="rod-3" src="./medias/images/fishing-rod.png"/>
+          <span>la canne à pêche de niveau 3 !</span>
+        </div>` : ''
+    }
+
+    ${ completedMapId == '04-04'
+      ? `
+        <div class="completed-bloc"><span>vous avez complété toutes les catégories de la campagne de la Grand' Pêche !</span></div>
+        <div class="completed-bloc"><span>vous êtes l'élite de la pêche mondiale !</span></div>` : ''
+    } ${ completedMapId == '04-04-unlock' 
+      ? `<div class="completed-bloc"><span>vous avez déverrouillé les cartes bonus de la Grand' Pêche !</span></div>` : ''
+    }
+  </div>`;
+  
+  if (completedMapId == '01-04' ||
+    completedMapId == '02-04' ||
+    completedMapId == '03-04' ||
+    completedMapId == '04-04') {
+    document.getElementById('buttonsArea').innerHTML = `<button class="continue-button" onclick="setRewardsPopup('${completedMapId}-unlock')">continuer</button>`;
+  } else {
+    document.getElementById('buttonsArea').innerHTML = `<button class="continue-button" onclick="continueFishing()">continuer</button>`;
+  }
+}
+window.setRewardsPopup = setRewardsPopup;
 
 /* ========================================================================= */
 /* =============================== SETTINGS ================================ */
@@ -1947,8 +2047,20 @@ const fishImages = {
 };
 
 openAppCinematic(true);
+
+// Sounds -------------------------------------------------
 const buttonClickSound = new Audio('./medias/sounds/click.mp3');
 buttonClickSound.volume = .25;
+const fishBiteSound = new Audio('./medias/sounds/splash-loud.mp3');
+const rewindRodSound = new Audio('./medias/sounds/remontee.mp3');
+const failedBattleSound = new Audio('./medias/sounds/fail2.mp3');
+const wonBattleSound = new Audio('./medias/sounds/success1.mp3');
+const recordBattleSound = new Audio('./medias/sounds/success2.mp3');
+const launchRodSound = new Audio('./medias/sounds/splash3.mp3');
+const cancelFishingSound = new Audio('./medias/sounds/cancel.mp3');
+const finishedGameSound = new Audio('./medias/sounds/success2.mp3'); // TODO
+
+// Music --------------------------------------------------
 const menuMusic = new Audio('./medias/music/home2.mp3');
 menuMusic.loop = true;
 menuMusic.volume = .25;
@@ -1957,9 +2069,9 @@ menuMusic.addEventListener("canplaythrough", (event) => {
     menuMusic.play();
   }
 });
-let mapMusic = new Audio('./medias/music/home1.mp3');
+let mapMusic = new Audio('./medias/music/home2.mp3');
 mapMusic.loop = true;
-let mapBackgroundSound = new Audio('./medias/music/home1.mp3');
+let mapBackgroundSound = new Audio('./medias/music/home2.mp3');
 mapBackgroundSound.loop = true;
 
 // ------------------------------------------------------------------------------------

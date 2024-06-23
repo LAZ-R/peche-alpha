@@ -63,6 +63,18 @@ export const MAPS = [
     ],
     fishes: [
       {
+        id: '01-01',
+        img: '',
+        commonName: 'poisson 01-01',
+        scientificName: 'poisson 01-01',
+        minLength: 22,
+        maxLength: 32,
+        minMass: 250,
+        maxMass: 600,
+      },
+    ],
+    /* fishes: [
+      {
         id: 'rutilusRutilus',
         img: '/01-01/fishes/rutilusRutilus',
         commonName: 'gardon',
@@ -162,7 +174,7 @@ export const MAPS = [
         minMass: 800,
         maxMass: 4000,
       },
-    ],
+    ], */
   },
   { // AMÉRIQUE DU NORD
     id: '01-02',
@@ -189,10 +201,10 @@ export const MAPS = [
       },
     ],
   },
-  { // LAC BAÏKAL
+  { // MÉDITERANNEE
     id: '01-03',
     img: '01-03',
-    name: 'lac baïkal',
+    name: 'côte méditerranéenne',
     spawnLine: 2,
     spawnColumn: 3,
     walkableCells: ['B3'],
@@ -203,33 +215,23 @@ export const MAPS = [
     ],
     fishes: [
       {
-        id: 'gasterosteusAculeatus',
-        img: '/01-03/fishes/gasterosteusAculeatus',
-        commonName: 'épinoche',
-        scientificName: 'gasterosteus aculeatus',
-        minLength: 4,
-        maxLength: 9,
-        minMass: 1,
-        maxMass: 7,
-      },
-      {
-        id: 'lotaLota',
-        img: '/01-03/fishes/lotaLota',
-        commonName: 'lotte',
-        scientificName: 'lota lota',
-        minLength: 35,
-        maxLength: 45,
-        minMass: 350,
+        id: '01-03',
+        img: '',
+        commonName: 'poisson 01-03',
+        scientificName: 'poisson 01-03',
+        minLength: 22,
+        maxLength: 32,
+        minMass: 250,
         maxMass: 600,
       },
     ],
   },
-  { // MÉDITERANNEE
+  { // GRANDE BARRIÈRE DE CORAIL
     id: '01-04',
     img: '01-04',
     spawnLine: 2,
     spawnColumn: 3,
-    name: 'côte méditerranéenne',
+    name: 'grande barrière<br>de corail',
     walkableCells: ['B3'],
     swimmableCells: [
       'A2', 'A3', 'A4',
@@ -252,10 +254,10 @@ export const MAPS = [
 
   // INTERMÉDIAIRE ================================================================================
 
-  { // GRANDE BARRIÈRE DE CORAIL
+  { // LAC TANGANYIKA
     id: '02-01',
     img: '02-01',
-    name: 'grande barrière<br>de corail',
+    name: 'lac tanganyika',
     spawnLine: 2,
     spawnColumn: 3,
     walkableCells: ['B3'],
@@ -277,10 +279,10 @@ export const MAPS = [
       },
     ],
   },
-  { // PARANÀ
+  { // CARAÏBES
     id: '02-02',
     img: '02-02',
-    name: 'rio paranà',
+    name: 'caraïbes',
     spawnLine: 2,
     spawnColumn: 3,
     walkableCells: ['B3'],
@@ -302,10 +304,10 @@ export const MAPS = [
       },
     ],
   },
-  { // CARAÏBES
+  { // RIO PARANÀ
     id: '02-03',
     img: '02-03',
-    name: 'caraïbes',
+    name: 'rio paranà',
     spawnLine: 2,
     spawnColumn: 3,
     walkableCells: ['B3'],
@@ -327,10 +329,10 @@ export const MAPS = [
       },
     ],
   },
-  { // NIL
+  { // LAC BAÏKAL
     id: '02-04',
     img: '02-04',
-    name: 'nil',
+    name: 'lac baïkal',
     spawnLine: 2,
     spawnColumn: 3,
     walkableCells: ['B3'],
@@ -351,6 +353,28 @@ export const MAPS = [
         maxMass: 600,
       },
     ],
+    /* fishes: [
+      {
+        id: 'gasterosteusAculeatus',
+        img: '/01-03/fishes/gasterosteusAculeatus',
+        commonName: 'épinoche',
+        scientificName: 'gasterosteus aculeatus',
+        minLength: 4,
+        maxLength: 9,
+        minMass: 1,
+        maxMass: 7,
+      },
+      {
+        id: 'lotaLota',
+        img: '/01-03/fishes/lotaLota',
+        commonName: 'lotte',
+        scientificName: 'lota lota',
+        minLength: 35,
+        maxLength: 45,
+        minMass: 350,
+        maxMass: 600,
+      },
+    ], */
   },
 
   // AVANCÉ =======================================================================================
@@ -442,7 +466,7 @@ export const MAPS = [
       'B2', 'B4',
       'C2', 'C3', 'C4'
     ],
-    /* fishes: [
+    fishes: [
       {
         id: '03-04',
         img: '',
@@ -453,8 +477,8 @@ export const MAPS = [
         minMass: 250,
         maxMass: 600,
       },
-    ], */
-    fishes: [
+    ],
+    /* fishes: [
       {
         id: 'arapaimaGigas',
         img: '', // à faire ------------
@@ -509,7 +533,7 @@ export const MAPS = [
         minMass: 2154,
         maxMass: 4686,
       },
-    ],
+    ], */
   },
 
   // EXPERT =======================================================================================
