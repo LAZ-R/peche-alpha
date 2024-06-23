@@ -61,7 +61,7 @@ export const MAPS = [
       'N2', 'N3', 'N4', 'N5', 'N6', 'N7', 'N8', 'N9', 'N10', 'N11', 'N12', 'N13', 'N14', 'N15',
       'O3', 'O4', 'O5', 'O12', 'O13'
     ],
-    fishes: [
+    /* fishes: [
       {
         id: '01-01',
         img: '',
@@ -72,8 +72,8 @@ export const MAPS = [
         minMass: 250,
         maxMass: 600,
       },
-    ],
-    /* fishes: [
+    ], */
+    fishes: [
       {
         id: 'rutilusRutilus',
         img: '/01-01/fishes/rutilusRutilus',
@@ -174,7 +174,7 @@ export const MAPS = [
         minMass: 800,
         maxMass: 4000,
       },
-    ], */
+    ],
   },
   { // AMÉRIQUE DU NORD
     id: '01-02',

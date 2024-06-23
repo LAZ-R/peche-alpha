@@ -1,11 +1,9 @@
 export const APP_NAME = 'la Grand\' Pêche (alpha)';
-export const APP_VERSION = '0.1.03'; // v 0.1.03 - deverrouillage cannes + amelioration pop ups récompenses + optimisation sons + modif ordre cartes + musiques maps + déverrouillage persos
-export const APP_SHORT_NAME = `pechealpha0103`;
+export const APP_VERSION = '0.1.04'; // v 0.1.04 - ajout records
+export const APP_SHORT_NAME = `pechealpha0104`;
 
 /*
   RAF ----------------------------------------------------------
-
-  - ajouter RECORDS
 
   - completer sons
     - bruits récompenses

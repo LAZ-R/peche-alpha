@@ -14,7 +14,8 @@ export const setStorage = () => {
       fishId: string,
       fishLength: number,
       fishMass: number,
-      notation: number
+      notation: number,
+      timestamp: Date.now()
     }
     */
     

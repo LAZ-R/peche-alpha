@@ -10,6 +10,29 @@ function randomIntFromInterval(min, max) { // min and max included
   return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
+function timestampToDateTimeObj(timestamp) {
+  // Convertir le timestamp en objet Date
+  const dateObj = new Date(timestamp);
+
+  // Extraire les composants de la date
+  const year = dateObj.getFullYear();
+  // Les mois sont indexés à partir de 0, donc on ajoute 1 pour obtenir le mois correct
+  const month = ('0' + (dateObj.getMonth() + 1)).slice(-2); // Pour obtenir le format 'MM'
+  const day = ('0' + dateObj.getDate()).slice(-2); // Pour obtenir le format 'DD'
+
+  // Extraire les composants de l'heure
+  const hours = ('0' + dateObj.getHours()).slice(-2); // Pour obtenir le format 'HH'
+  const minutes = ('0' + dateObj.getMinutes()).slice(-2); // Pour obtenir le format 'mm'
+
+  // Construire l'objet avec la date et l'heure formatées
+  const dateTimeObj = {
+      date: `${day}-${month}-${year.toString()[2]}${year.toString()[3]}`,
+      hour: `${hours}:${minutes}`
+  };
+
+  return dateTimeObj;
+}
+
 /* ========================================================================= */
 /* ============================== CONSTANTES =============================== */
 /* ========================================================================= */
@@ -924,6 +947,10 @@ const getRandomIndividual = (fishType) => {
   }
 }
 
+const getMapById = (id) => {
+  return MAPS.filter((map) => map.id == id)[0];
+}
+
 const getFishById = (id) => {
   return currentMap.fishes.filter((fish) => fish.id == id)[0];
 }
@@ -1123,7 +1150,8 @@ const launchBattle = () => {
         fishId: INDIVIDUAL.id,
         fishLength: INDIVIDUAL.length,
         fishMass: INDIVIDUAL.mass,
-        notation: INDIVIDUAL.notation
+        notation: INDIVIDUAL.notation,
+        timestamp: Date.now()
       }
 
       let user = getUser();
@@ -1526,11 +1554,111 @@ const onMapButtonClick = (mapIndex) => {
 }
 window.onMapButtonClick = onMapButtonClick;
 
+const getRecordFish = (mapId, fishId) => {
+  let user = getUser();
+  const MAP = getMapById(mapId);
+  const allFishes = [];
+  user.catches.forEach(fish => {
+    if (fish.mapId == mapId && fish.fishId == fishId) {
+      allFishes.push(fish);
+    }
+  });
+  if (allFishes.length != 0) {
+    allFishes.sort((a, b) => {
+      if (a.mass < b.mass)
+        return -1;
+      if (a.mass > b.mass )
+        return 1;
+      return 0;
+    });
+    return allFishes[0];
+  }
+  return {
+    mapId: '0',
+    fishId: '0',
+    fishLength: 0,
+    fishMass: 0,
+    notation: 0,
+    timestamp: 0
+  }
+}
+
+const getMapRecords = (mapId) => {
+  const MAP = getMapById(mapId);
+  const allFishes = [];
+  MAP.fishes.forEach(fish => {
+    const recordFish = getRecordFish(mapId, fish.id);
+    if (recordFish.fishId != 0) {
+      allFishes.push(recordFish);
+    }
+  });
+  return allFishes;
+}
+
+const getFishRecordCard = (fish) => {
+  const FISH = getFishById(fish.fishId);
+  const path = FISH.img == '' ? `./medias/images/no-picture.png` : `./medias/images/maps/${fish.mapId}/fishes/${fish.fishId}.png`;
+  const date = timestampToDateTimeObj(fish.timestamp);
+  return `
+    <div class="record-fish-card">
+      <img src="${path}" />
+      <div class="fish-informations">
+        <span>${getFishById(fish.fishId).commonName}</span>
+        <span><i>${getFishById(fish.fishId).scientificName}</i></span>
+      </div>
+      <div class="fish-records">
+      <span>${getFormattedLength(fish.fishLength)}</span>
+      <span>${getFormattedMass(fish.fishMass)}</span>
+      </div>
+      <div class="right-area">
+        <div class="notation-images">${getNotationImages(fish.notation)}</div>
+        <div class="date-informations">
+          <span>${date.date}</span>
+          <span>${date.hour}</span>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+const getMapRecordCards = (mapId) => {
+  const MAP = getMapById(mapId);
+  let str = '';
+  let str2 = '';
+  const mapRecordCatches = getMapRecords(mapId);
+  if (mapRecordCatches.length != 0) {
+    mapRecordCatches.forEach(fish => {
+      str += getFishRecordCard(fish);
+    });
+
+    str2 = `
+      <div>
+        <span>${MAP.name}</span>
+        <div class="record-fishes-container">
+          ${str}
+        </div>
+      </div>
+    `;
+  }
+  
+  return str2;
+}
+
+const getMapsRecordsCards = () => {
+  let str = '';
+  MAPS.forEach(map => {
+    str += getMapRecordCards(map.id);
+  });
+  return str;
+}
+
 const onRecordsClick = () => {
   if (getUserSetting('soundEffects').isActive) {
     buttonClickSound.play();
   }
   let user = getUser();
+  let firstFish = user.catches[0];
+  const date = timestampToDateTimeObj(firstFish.timestamp);
   document.getElementById('main').innerHTML += `
     <div id="popup" class="popup home-screen">
       <div class="popup-top">
@@ -1538,13 +1666,13 @@ const onRecordsClick = () => {
         <button class="close-popup-button" onclick="onClosePopupClick()">X</button>
       </div>
       <div class="records-display">
-
-        <span>prises totales : ${user.catches.length}</span>
-
-        <span>liste des meilleures prises</span>
-
-        <div>
-          <span>à venir</span>
+        <div class="total-catches">
+          <span>prises totales</span>
+          <span>${user.catches.length} poissons attrapés<br>depuis le ${date.date} à ${date.hour}</span>
+        </div>
+        <span>meilleures prises</span>
+        <div class="maps-container">
+          ${getMapsRecordsCards()}
         </div>
 
       </div>
