@@ -194,12 +194,14 @@ main {
 
         #cabinButton {
           position: absolute;
-          bottom: var(--cell-size);
-          width: calc(6 * var(--cell-size));
-          height: calc(2 * var(--cell-size));
-          background-color: red;
-          opacity: 0;
-          border: 0;
+          bottom: calc(var(--cell-size) / 2);
+          width: calc(7 * var(--cell-size));
+          height: calc(3 * var(--cell-size));
+          /* background-color: red; */
+          background-color: #00000038;
+          border: 2px solid #ffffffc5;
+          transition: opacity .5s linear;
+          border-radius: 8px;
         }
       }
 
@@ -806,6 +808,8 @@ main {
           display: flex;
           align-items: center;
           gap: var(--cell-size);
+          background-color: transparent;
+          border: none;
 
           &.uncaught {
             opacity: .5;
@@ -1277,9 +1281,66 @@ main {
         font-size: 10px;
       }
     }
-  
-  
-    
-  
+  }
+}
+
+.popup.vivier > .record-fish-card {
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  min-width: 100%; width: 100%; max-width: 100%;
+  gap: calc(var(--cell-size) / 2);
+  margin-bottom: auto;
+
+  &.uncaught {
+    margin-top: var(--cell-size);
+    opacity: .5;
+    filter: brightness(0);
+  }
+
+  & > img {
+    width: 50%;
+  }
+
+  & .fish-informations {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    font-size: 16px;
+    text-align: start;
+  }
+
+  & .best-catch-title {
+    margin-top: var(--cell-size);
+    font-size: 14px;
+  }
+
+  & .notation-images {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 3px;
+
+    img {
+      width: 20px;
+    }
+  }
+
+  & .date-informations {
+    align-items: center;
+    font-size: 12px;
+  }
+
+  & .fish-records {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    gap: 10px;
+    min-width: 100%; width: 100%; max-width: 100%;
   }
 }

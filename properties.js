@@ -1,5 +1,5 @@
 export const APP_NAME = 'la Grand\' Pêche (alpha)';
-export const APP_VERSION = '0.1.04'; // v 0.1.04 - ajout records
+export const APP_VERSION = '0.1.05'; // v 0.1.05 - possible fix bug timing + ajout possibilité de recliquer sur case blanche direct + fish details dans vivier + reset via 5 clics sur n ver
 export const APP_SHORT_NAME = `pechealpha0104`;
 
 /*
@@ -11,12 +11,8 @@ export const APP_SHORT_NAME = `pechealpha0104`;
     - bruits de pas
     - ambiance océan
 
-  - Ajout personalisation ?
-
   - passer toutes les images
     png en webp
       - perso principal - OK (à refaire via convert.io)
       - poissons maps
-
-  - Concevoir les objets à ajouter sur la map d'accueil
 */

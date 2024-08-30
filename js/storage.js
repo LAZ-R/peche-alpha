@@ -4,6 +4,11 @@ import { DEFAULT_SETTINGS } from "./app-default-settings.js";
 const STORAGE = localStorage;
 const appShortName = APP_SHORT_NAME;
 
+export const removeStorage = () => {
+  STORAGE.removeItem(`${appShortName}FirstTime`)
+  STORAGE.removeItem(`${appShortName}User`);
+}
+
 export const setStorage = () => {
   if (STORAGE.getItem(`${appShortName}FirstTime`) === null) {
     STORAGE.setItem(`${appShortName}FirstTime`, '0');

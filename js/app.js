@@ -1,7 +1,7 @@
 import { APP_VERSION } from "../properties.js";
 import { MAPS } from "./maps.data.js";
 import { CHARACTERS } from "./characters.data.js";
-import { getUser, getUserSetting, setStorage, setUser } from "./storage.js";
+import { getUser, getUserSetting, setStorage, setUser, removeStorage } from "./storage.js";
 import { requestWakeLock } from "./wakelock.js";
 
 // UTILS
@@ -39,11 +39,10 @@ function timestampToDateTimeObj(timestamp) {
 // Lettres des lignes de la grille
 const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P'];
 
-const minSpawnTime = 7134;
-const maxSpawnTime = 14798;
-
 const minFishMovement = 16;
 const maxFishMovement = 64;
+
+let appVersionClicks = 0;
 
 /* ========================================================================= */
 /* ============================ Génération DOM ============================= */
@@ -63,14 +62,26 @@ const renderHomeTemplate = () => {
       <div id="homeButtonsArea" class="home-buttons-area">
         <button id="playButton" class="home-screen-button" onclick="onPlayClick()">jouer</button>
         <button id="recordsButton" class="home-screen-button" onclick="onRecordsClick()" ${user.catches.length == 0 ? 'disabled' : ''}>records</button>
-        <button id="cabinButton" onclick="onCabinClick()">cabane</button>
+        <button id="cabinButton" onclick="onCabinClick()"></button>
       </div>
     </div>
     <div id="buttonsArea" class="buttons-area home-screen">
     </div>
-    <span id="versionNumber" style="margin-top: auto; margin-bottom: 2svh; transition: opacity .5s linear;">v ${APP_VERSION}</span>
+    <span id="versionNumber" style="margin-top: auto; margin-bottom: 2svh; transition: opacity .5s linear;" onclick="onAppVersionClick()">v ${APP_VERSION}</span>
   `;
 }
+
+const onAppVersionClick = () => {
+  appVersionClicks ++;
+  console.log(appVersionClicks);
+
+  if (appVersionClicks == 5) {
+    appVersionClicks = 0;
+    removeStorage();
+    window.location = window.location;
+  }
+}
+window.onAppVersionClick = onAppVersionClick;
 
 const openAppCinematic = (isAppOpening) => {
   let user = getUser();
@@ -80,7 +91,7 @@ const openAppCinematic = (isAppOpening) => {
     document.getElementById('cabinButton').setAttribute('disabled', true);
     document.getElementById('topArea').style.opacity = 0;
     document.getElementById('playButton').style.opacity = 0;
-    //document.getElementById('cabinButton').style.opacity = 0;
+    document.getElementById('cabinButton').style.opacity = 0;
     document.getElementById('recordsButton').style.opacity = 0;
     document.getElementById('screenArea').style.opacity = 0;
     document.getElementById('buttonsArea').style.opacity = 0;
@@ -108,6 +119,7 @@ const openAppCinematic = (isAppOpening) => {
             setTimeout(() => {
               document.getElementById('versionNumber').style.opacity = 1;
               document.getElementById('cabinButton').removeAttribute('disabled');
+              document.getElementById('cabinButton').style.opacity = 1;
               // Futur bouton paramètres
             }, 500);
           }, 500);
@@ -248,6 +260,69 @@ const defineMap = (map) => {
 
 /* ############################### Map page ############################### */
 
+const onVivierFishDetailsCloseClick = () => {
+  if (getUserSetting('soundEffects').isActive) {
+    buttonClickSound.play();
+  }
+  onClosePopupClick();
+  onVivierClick();
+}
+window.onVivierFishDetailsCloseClick = onVivierFishDetailsCloseClick;
+
+const onVivierFishCardClick = (fishId) => {
+  if (getUserSetting('soundEffects').isActive) {
+    buttonClickSound.play();
+  }
+
+  let user = getUser();
+  let fish = getFishById(fishId);
+
+  let hasBeenCaught = false;
+  let bestNotation = 0;
+  let bestCatch = '';
+
+  user.catches.forEach(caughtFish => {
+    //console.log(caughtFish.fishId);
+    if (fish.id == caughtFish.fishId && caughtFish.mapId == currentMap.id) {
+      //console.log('has been caught');
+      hasBeenCaught = true;
+      if (caughtFish.notation > bestNotation) {
+        bestNotation = caughtFish.notation;
+        bestCatch = caughtFish;
+      }
+    }
+  });
+
+  const imgSrc = fish.img == '' ? `./medias/images/no-picture.png` : `./medias/images/maps/${fish.img}.png`;
+
+  let popup = document.getElementById('popup');
+  popup.innerHTML = `
+    <div class="popup-top">
+      <span>vivier</span>
+      <button class="close-popup-button" onclick="onVivierFishDetailsCloseClick('')">X</button>
+    </div>
+
+    <div class="record-fish-card ${hasBeenCaught ? '' : 'uncaught'}">
+      <img src="${imgSrc}" />
+      <div class="fish-informations">
+        <span>${fish.commonName}</span>
+        <span><i>${fish.scientificName}</i></span>
+      </div>
+    ${hasBeenCaught ?  `
+      <span class="best-catch-title">
+        meilleure prise
+      </span>
+      <div class="notation-images">${getNotationImages(bestCatch.notation)}</div>
+      <div class="date-informations">
+          <span>Le ${timestampToDateTimeObj(bestCatch.timestamp).date}</span><span> à ${timestampToDateTimeObj(bestCatch.timestamp).hour}</span>
+        </div>
+      <div class="fish-records">
+        <span>${getFormattedLength(bestCatch.fishLength)}</span> - <span>${getFormattedMass(bestCatch.fishMass)}</span>
+      </div>` : ''}
+    </div>`;
+}
+window.onVivierFishCardClick = onVivierFishCardClick;
+
 /* ================================ Top part ================================ */
 const renderVivierFishCard = (fish) => {
   let user = getUser();
@@ -267,14 +342,14 @@ const renderVivierFishCard = (fish) => {
 
   const imgSrc = fish.img == '' ? `./medias/images/no-picture.png` : `./medias/images/maps/${fish.img}.png`;
   return `
-    <div class="vivier-fish-card ${hasBeenCaught ? '' : 'uncaught'}">
+    <button class="vivier-fish-card ${hasBeenCaught ? '' : 'uncaught'}" onclick="onVivierFishCardClick('${fish.id}')">
       <img src="${imgSrc}" />
       <div>
         <span>${fish.commonName}</span>
         <span><i>${fish.scientificName}</i></span>
         </div>
         ${hasBeenCaught ?  `<div class="notation-area small">${getNotationImages(bestNotation)}</div>` : ''}
-    </div>
+    </button>
   `;
 }
 /* <span>de ${fish.minLength}cm à ${fish.maxLength}cm</span>
@@ -901,7 +976,7 @@ const generateFishRandomlyXTimes = () => {
   fishGeneration = setInterval(() => {
     let rndCell = getRandomSwimmableCellCoordinates();
     generateFish(rndCell.letterIndex, rndCell.column);
-  }, randomIntFromInterval(minSpawnTime, maxSpawnTime));
+  }, (randomIntFromInterval(7, 14) * 1000)); // POSSIBLE FIX ICI
 }
 
 /* =============================== Battle =============================== */
@@ -1094,6 +1169,7 @@ const launchBattle = () => {
         `ah, c'est manqué !<br>le poisson a disparu...`,
         `pas cette fois !<br>le poisson s'est échappé...`,
         `tant pis !<br>le poisson a réussi à s'enfuir...`,
+        `@#&%$!<br>le poisson a réussi à filer...`,
       ];
       document.getElementById('popup').innerHTML = ``;
       document.getElementById('popup').innerHTML = `
@@ -1704,7 +1780,11 @@ const onClosePopupClick = (popupName) => {
   if (getUserSetting('soundEffects').isActive) {
     buttonClickSound.play();
   }
-  document.getElementById('popup').remove();
+  if (popupName != 'fishCard') {
+    document.getElementById('popup').remove();
+  } else {
+
+  }
 
   if (popupName == 'home' || popupName == 'vivier') {
     document.getElementById('vivierButton').removeAttribute('disabled');
@@ -1866,23 +1946,26 @@ const onCellClick = (cellId) => {
   //console.log(cellId);
   const CELL = document.getElementById(cellId);
 
-  if (!isSelected) {
-    if (CELL.classList.contains('selectable')) {
-      CELL.classList.replace('selectable', 'selected');
-      if (getUserSetting('soundEffects').isActive) {
-        launchRodSound.play();
-      }
-      isSelected = true;
-
-      applyCharacterImgFromSelectedCell(cellId);
-
-      document.getElementById('buttonsArea').innerHTML = '';
-      document.getElementById('buttonsArea').innerHTML = `<button class="abort-button" onclick="abortFishing('${cellId}')">annuler</button>`;
+  if (CELL.classList.contains('selected')) {
+    abortFishing(cellId);
+    isSelected = false;
+  } else if (CELL.classList.contains('selectable')) {
+    let previouslySelectedCellArray = document.getElementsByClassName('selected');
+    let previouslySelectedCell = previouslySelectedCellArray[0];
+    //console.log(previouslySelectedCell);
+    if (previouslySelectedCell != undefined) {
+      previouslySelectedCell.classList.replace('selected', 'selectable')
     }
-  } else {
-    if (CELL.classList.contains('selected')) {
-      abortFishing(cellId);
+    CELL.classList.replace('selectable', 'selected');
+    if (getUserSetting('soundEffects').isActive) {
+      launchRodSound.play();
     }
+    isSelected = true;
+
+    applyCharacterImgFromSelectedCell(cellId);
+
+    document.getElementById('buttonsArea').innerHTML = '';
+    document.getElementById('buttonsArea').innerHTML = `<button class="abort-button" onclick="abortFishing('${cellId}')">annuler</button>`;
   }
 }
 window.onCellClick = onCellClick;
