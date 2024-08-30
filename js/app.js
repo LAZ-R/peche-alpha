@@ -286,6 +286,10 @@ const onVivierFishCardClick = (fishId) => {
     if (fish.id == caughtFish.fishId && caughtFish.mapId == currentMap.id) {
       //console.log('has been caught');
       hasBeenCaught = true;
+      if (caughtFish.notation == 0 && bestNotation == 0) {
+        bestNotation = caughtFish.notation;
+        bestCatch = caughtFish;
+      }
       if (caughtFish.notation > bestNotation) {
         bestNotation = caughtFish.notation;
         bestCatch = caughtFish;
