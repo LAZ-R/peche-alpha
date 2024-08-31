@@ -1314,8 +1314,13 @@ main {
   }
 
   & .best-catch-title {
-    margin-top: var(--cell-size);
+    margin-top: calc(var(--cell-size) /2);
     font-size: 14px;
+  }
+
+  & .date-informations {
+    align-items: center;
+    font-size: 12px;
   }
 
   & .notation-images {
@@ -1330,17 +1335,47 @@ main {
     }
   }
 
-  & .date-informations {
-    align-items: center;
-    font-size: 12px;
-  }
-
   & .fish-records {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 12px;
+    font-size: 16px;
     gap: 10px;
     min-width: 100%; width: 100%; max-width: 100%;
+  }
+}
+
+.tools {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  gap: var(--cell-size);
+  margin-top: auto;
+  margin-bottom: auto;
+
+  .tool-category {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    gap: 5px;
+
+    .radio-group {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+
+      .radio-field {
+        display: flex;
+        /* flex-direction: column; */
+        border: 1px solid white;
+        padding: 4px 8px;
+        border-radius: 8px;
+      }
+    }
   }
 }

@@ -1,5 +1,5 @@
 export const APP_NAME = 'la Grand\' Pêche (alpha)';
-export const APP_VERSION = '0.1.05'; // v 0.1.05 - possible fix bug timing + ajout possibilité de recliquer sur case blanche direct + fish details dans vivier + reset via 5 clics sur n ver
+export const APP_VERSION = '0.1.06'; // v 0.1.06 - ajout dev tools + home avec nouveaux sprites
 export const APP_SHORT_NAME = `pechealpha0104`;
 
 /*

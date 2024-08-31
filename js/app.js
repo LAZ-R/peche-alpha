@@ -75,13 +75,73 @@ const onAppVersionClick = () => {
   appVersionClicks ++;
   console.log(appVersionClicks);
 
-  if (appVersionClicks == 5) {
+  if (appVersionClicks == 7) {
     appVersionClicks = 0;
-    removeStorage();
-    window.location = window.location;
+    onClosePopupClick();
+    document.getElementById('main').innerHTML += `
+    <div id="popup" class="popup">
+      <div class="popup-top">
+        <span>DEV TOOLS</span>
+        <button class="close-popup-button" onclick="onClosePopupClick()">X</button>
+      </div>
+      <div class="tools">
+        <div class="tool-category">
+          <span>canne</span>
+          <div class="radio-group">
+            <div class="radio-field">
+              <input type="radio" name="rodLevel" id="lvl1" value="lvl1" onchange="onRodRadioValueChange('lvl1')" />
+              <label for="lvl1">lvl 1</label>
+            </div>
+            <div class="radio-field">
+              <input type="radio" name="rodLevel" id="lvl2" value="lvl2" onchange="onRodRadioValueChange('lvl2')" />
+              <label for="lvl2">lvl 2</label>
+            </div>
+            <div class="radio-field">
+              <input type="radio" name="rodLevel" id="lvl3" value="lvl3" onchange="onRodRadioValueChange('lvl3')" />
+              <label for="lvl3">lvl 3</label>
+            </div>
+          </div>
+        </div>
+        <div class="tool-category">
+          <span>stockage</span>
+          <button onclick="onRemoveUserDataClick()">remove user data</button>
+        </div>
+      </div>
+    </div>
+    `;
   }
 }
 window.onAppVersionClick = onAppVersionClick;
+
+const onRodRadioValueChange = (lvl) => {
+  let user = getUser();
+  console.log(lvl);
+  switch (lvl) {
+    case 'lvl1':
+      user.currentRod = 1;
+      setUser(user);
+      currentRod = 1;
+      break;
+    case 'lvl2':
+      user.currentRod = 2;
+      setUser(user);
+      currentRod = 2;
+      break;
+    case 'lvl3':
+      user.currentRod = 3;
+      setUser(user);
+      currentRod = 3;
+      break;
+    default:
+      break;
+  }
+}
+window.onRodRadioValueChange = onRodRadioValueChange;
+
+const onRemoveUserDataClick = () => {
+  removeStorage();
+}
+window.onRemoveUserDataClick = onRemoveUserDataClick;
 
 const openAppCinematic = (isAppOpening) => {
   let user = getUser();
@@ -317,12 +377,13 @@ const onVivierFishCardClick = (fishId) => {
         meilleure prise
       </span>
       <div class="notation-images">${getNotationImages(bestCatch.notation)}</div>
-      <div class="date-informations">
-          <span>Le ${timestampToDateTimeObj(bestCatch.timestamp).date}</span><span> à ${timestampToDateTimeObj(bestCatch.timestamp).hour}</span>
-        </div>
       <div class="fish-records">
         <span>${getFormattedLength(bestCatch.fishLength)}</span> - <span>${getFormattedMass(bestCatch.fishMass)}</span>
-      </div>` : ''}
+      </div>
+      <div class="date-informations">
+        <span>Le ${timestampToDateTimeObj(bestCatch.timestamp).date}</span><span> à ${timestampToDateTimeObj(bestCatch.timestamp).hour}</span>
+      </div>
+      ` : ''}
     </div>`;
 }
 window.onVivierFishCardClick = onVivierFishCardClick;
@@ -980,7 +1041,7 @@ const generateFishRandomlyXTimes = () => {
   fishGeneration = setInterval(() => {
     let rndCell = getRandomSwimmableCellCoordinates();
     generateFish(rndCell.letterIndex, rndCell.column);
-  }, (randomIntFromInterval(7, 14) * 1000)); // POSSIBLE FIX ICI
+  }, (randomIntFromInterval(10, 20) * 1000)); // POSSIBLE FIX ICI
 }
 
 /* =============================== Battle =============================== */
@@ -1775,24 +1836,29 @@ const onRecordsClick = () => {
 window.onRecordsClick = onRecordsClick;
 
 const onCabinClick = () => {
+  if (getUserSetting('soundEffects').isActive) {
+    buttonClickSound.play();
+  }
   //console.log('click cabin');
   fromHomeToMap();
 }
 window.onCabinClick = onCabinClick;
 
 const onClosePopupClick = (popupName) => {
-  if (getUserSetting('soundEffects').isActive) {
-    buttonClickSound.play();
-  }
-  if (popupName != 'fishCard') {
-    document.getElementById('popup').remove();
-  } else {
+  let popup = document.getElementById('popup');
 
-  }
-
-  if (popupName == 'home' || popupName == 'vivier') {
-    document.getElementById('vivierButton').removeAttribute('disabled');
-    document.getElementById('homeButton').removeAttribute('disabled');
+  if (popup != null && popup != undefined) {
+    if (getUserSetting('soundEffects').isActive) {
+      buttonClickSound.play();
+    }
+    if (popupName != 'fishCard') {
+      popup.remove();
+    }
+  
+    if (popupName == 'home' || popupName == 'vivier') {
+      document.getElementById('vivierButton').removeAttribute('disabled');
+      document.getElementById('homeButton').removeAttribute('disabled');
+    }
   }
 }
 window.onClosePopupClick = onClosePopupClick;

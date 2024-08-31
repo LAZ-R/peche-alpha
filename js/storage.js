@@ -5,8 +5,11 @@ const STORAGE = localStorage;
 const appShortName = APP_SHORT_NAME;
 
 export const removeStorage = () => {
-  STORAGE.removeItem(`${appShortName}FirstTime`)
-  STORAGE.removeItem(`${appShortName}User`);
+  if (window.confirm('are you sure you want to remove all user data from this app ?')) {
+    STORAGE.removeItem(`${appShortName}FirstTime`)
+    STORAGE.removeItem(`${appShortName}User`);
+    window.location = window.location;
+  }
 }
 
 export const setStorage = () => {
