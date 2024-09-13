@@ -1,5 +1,5 @@
 export const APP_NAME = 'la Grand\' Pêche (alpha)';
-export const APP_VERSION = '0.1.06'; // v 0.1.06 - ajout dev tools + home avec nouveaux sprites
+export const APP_VERSION = '0.1.07'; // v 0.1.07 - uncatch = unknown + sprites 01-01 & 05-01
 export const APP_SHORT_NAME = `pechealpha0104`;
 
 /*

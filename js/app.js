@@ -369,8 +369,8 @@ const onVivierFishCardClick = (fishId) => {
     <div class="record-fish-card ${hasBeenCaught ? '' : 'uncaught'}">
       <img src="${imgSrc}" />
       <div class="fish-informations">
-        <span>${fish.commonName}</span>
-        <span><i>${fish.scientificName}</i></span>
+        <span>${hasBeenCaught ? fish.commonName : '??????'}</span>
+        <span><i>${hasBeenCaught ? fish.scientificName : 'unknown'}</i></span>
       </div>
     ${hasBeenCaught ?  `
       <span class="best-catch-title">
@@ -410,8 +410,8 @@ const renderVivierFishCard = (fish) => {
     <button class="vivier-fish-card ${hasBeenCaught ? '' : 'uncaught'}" onclick="onVivierFishCardClick('${fish.id}')">
       <img src="${imgSrc}" />
       <div>
-        <span>${fish.commonName}</span>
-        <span><i>${fish.scientificName}</i></span>
+        <span>${hasBeenCaught ? fish.commonName : '??????'}</span>
+        <span><i>${hasBeenCaught ? fish.scientificName : 'unknown'}</i></span>
         </div>
         ${hasBeenCaught ?  `<div class="notation-area small">${getNotationImages(bestNotation)}</div>` : ''}
     </button>
